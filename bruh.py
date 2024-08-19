@@ -231,11 +231,11 @@ def main():
             os.system("figlet IPInfo | lolcat")
             slowprint(" ")
             slowprint ("\033[1;33m [ 1 ]\033[1;91m Scan IP Address")
-            slowprint ("\033[1;33m [ 3 ]\033[1;91m DNS Lookup")
-            slowprint ("\033[1;33m [ 4 ]\033[1;91m IP to Subnets")
-            slowprint ("\033[1;33m [ 5 ]\033[1;91m IP to Binary")
-            slowprint ("\033[1;33m [ 6 ]\033[1;91m Generate Password")
-            slowprint ("\033[1;33m [ 2 ]\033[1;91m About This Tool")
+            slowprint ("\033[1;33m [ 2 ]\033[1;91m DNS Lookup")
+            slowprint ("\033[1;33m [ 3 ]\033[1;91m IP to Subnets")
+            slowprint ("\033[1;33m [ 4 ]\033[1;91m IP to Binary")
+            slowprint ("\033[1;33m [ 5 ]\033[1;91m Generate Password")
+            slowprint ("\033[1;33m [ 6 ]\033[1;91m About This Tool")
             slowprint ("\033[1;33m [ 0 ]\033[1;91m Exit")
             print("     ")
             option = input("\033[1;36m [+] IPInformation >> \033[1;32m")
@@ -243,29 +243,29 @@ def main():
                 os.system("clear")
                 ipinfo()
 
-            elif option == "3":
+            elif option == "2":
                 os.system("clear")
                 dns_lookup()
 
-            elif option == "4":
+            elif option == "3":
                 os.system("clear")
                 ip_to_subnets()
 
-            elif option == "5":
+            elif option == "4":
                 os.system("clear")
                 ip_to_binary()
 
-            elif option == "6":
+            elif option == "5":
                 os.system("clear")
                 password_generator()
+
+            elif option == "6":
+                os.system("clear")
+                about()
 
             elif option == "0":
                 os.system("clear")
                 ext()
-
-            elif option == "2":
-                os.system("clear")
-                about()
 
             else:
                 os.system("clear")
