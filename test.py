@@ -10,7 +10,8 @@ import time
 import socket
 import ipaddress
 import math
-import requests
+import random
+import string
 
 def slowprint(s):
     for c in s + '\n':
@@ -82,30 +83,25 @@ def dns_lookup():
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
 
-
 def ip_to_subnets():
     while True:
         try:
-            # Get IP address and number of subnets from the user
             ip_input = input("Enter an IP address (e.g., 10.1.1.0/24): ")
             network = ipaddress.IPv4Network(ip_input, strict=False)
             num_subnets = int(input("Enter the number of subnets to create: "))
             if num_subnets <= 0:
                 raise ValueError("Number of subnets must be a positive integer.")
 
-            # Calculate the new subnet prefix
             new_prefix = network.prefixlen + math.ceil(math.log2(num_subnets))
             if new_prefix > 32:
                 raise ValueError("The number of subnets exceeds the available address space.")
 
-            # Calculate the possible number of subnets and display the new subnet mask
             num_possible_subnets = 2**(new_prefix - network.prefixlen)
             subnet_mask = ipaddress.IPv4Network(f"0.0.0.0/{new_prefix}").netmask
 
             print(f"\nTo create {num_subnets} subnets, the new subnet mask will be: {subnet_mask}")
             print(f"You can create up to {num_possible_subnets} subnets with this configuration.\n")
 
-            # Display each subnet with host range and broadcast address
             subnets = list(network.subnets(new_prefix=new_prefix))
             print(f"{'Subnet':<10} {'Network Address':<20} {'First Host':<20} {'Last Host':<20} {'Broadcast Address':<20}")
             print("-" * 90)
@@ -156,11 +152,55 @@ def is_valid_ip(ip):
 def ip_to_binary_func(ip):
     return '.'.join(format(int(octet), '08b') for octet in ip.split('.'))
 
+def generate_password(length, use_uppercase, use_lowercase, use_special):
+    characters = ""
+    
+    if use_uppercase:
+        characters += string.ascii_uppercase
+    if use_lowercase:
+        characters += string.ascii_lowercase
+    if use_special:
+        characters += string.punctuation
+    
+    if not characters:
+        raise ValueError("At least one character type must be selected.")
+    
+    password = ''.join(random.choice(characters) for _ in range(length))
+    return password
+
+def password_generator():
+    while True:
+        try:
+            length = int(input("Enter the length of the password (1-50): "))
+            if length < 1 or length > 50:
+                raise ValueError("Length must be between 1 and 50.")
+            
+            use_uppercase = input("Include uppercase letters? (y/n): ").strip().lower() == 'y'
+            use_lowercase = input("Include lowercase letters? (y/n): ").strip().lower() == 'y'
+            use_special = input("Include special characters? (y/n): ").strip().lower() == 'y'
+
+            password = generate_password(length, use_uppercase, use_lowercase, use_special)
+            print(f"Generated Password: {password}")
+
+            choice = input("\033[1;91mPress \033[1;36mENTER\033[1;91m to generate another password or \033[1;36m'M'\033[1;91m to return to the menu: ").strip().lower()
+            if choice == 'm':
+                os.system("clear")
+                return
+            os.system("clear")
+        
+        except ValueError as e:
+            print(f"Error: {e}")
+        except KeyboardInterrupt:
+            os.system("clear")
+            return
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+
 def about():
     try:
         os.system("clear")
         print ("\033[1;32m\007\n")
-        os.system("figlet sysadmin tool")
+        os.system("figlet sys tools")
         time.sleep(2)
         slowprint ("\033[1;91m -----------------------------------------------")
         slowprint ("\033[1;33m" + "         [+] Tool Name     =>\033[1;36m" + " TestTool")
@@ -178,7 +218,7 @@ def about():
 
 def ext():
     slowprint ("\033[1;36m ==============================================")
-    slowprint ("\033[1;33m|      Thanks For Using IP-Information         |")
+    slowprint ("\033[1;33m|      Thanks For Using Sys-Tools              |")
     slowprint ("\033[1;36m ==============================================")
     time.sleep(1)
     exit()
@@ -188,13 +228,14 @@ def main():
         try:
             os.system("clear")
             print("\033[1;36m")
-            os.system("figlet IPInfo | lolcat")
+            os.system("figlet Sys tools")
             slowprint(" ")
             slowprint ("\033[1;33m [ 1 ]\033[1;91m Scan IP Address")
             slowprint ("\033[1;33m [ 2 ]\033[1;91m About This Tool")
             slowprint ("\033[1;33m [ 3 ]\033[1;91m DNS Lookup")
             slowprint ("\033[1;33m [ 4 ]\033[1;91m IP to Subnets")
             slowprint ("\033[1;33m [ 5 ]\033[1;91m IP to Binary")
+            slowprint ("\033[1;33m [ 6 ]\033[1;91m Generate Password")
             slowprint ("\033[1;33m [ 0 ]\033[1;91m Exit")
             print("     ")
             option = input("\033[1;36m [+] IPInformation >> \033[1;32m")
@@ -213,6 +254,10 @@ def main():
             elif option == "5":
                 os.system("clear")
                 ip_to_binary()
+
+            elif option == "6":
+                os.system("clear")
+                password_generator()
 
             elif option == "0":
                 os.system("clear")
