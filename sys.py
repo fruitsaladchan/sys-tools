@@ -63,10 +63,13 @@ def ipinfo():
 def dns_lookup():
     while True:
         try:
+            os.system("figlet DNS Lookup")
+            print(" ")
             domain = input("Enter a domain name (e.g., example.com): ")
             ip_address = socket.gethostbyname(domain)
             print(f"The IP address for {domain} is: {ip_address}")
 
+            print (" ")
             magas = input("\033[1;33m [+] Press Enter To Continue [+]")
 
             os.system("clear")
@@ -82,6 +85,8 @@ def dns_lookup():
 def ip_to_subnets():
     while True:
         try:
+            os.system("figlet IP to Subnet")
+            print(" ")
             ip_input = input("Enter an IP address (e.g., 10.1.1.0/24): ")
             network = ipaddress.IPv4Network(ip_input, strict=False)
             num_subnets = int(input("Enter the number of subnets to create: "))
@@ -106,6 +111,7 @@ def ip_to_subnets():
                 last_ip = subnet.broadcast_address - 1
                 print(f"{i:<10} {str(subnet.network_address):<20} {str(first_ip):<20} {str(last_ip):<20} {str(subnet.broadcast_address):<20}")
 
+            print (" ")
             magas = input("\033[1;33m [+] Press Enter To Continue [+]")
 
             os.system("clear")
@@ -121,9 +127,13 @@ def ip_to_subnets():
 def ip_to_binary():
     while True:
         try:
+            os.system("figlet Ip to Binary")
+            print(" ")
             ip = input("Please enter a valid IP address: ")
             if is_valid_ip(ip):
                 print(f"The binary representation of {ip} is: {ip_to_binary_func(ip)}")
+
+                print (" ")
                 magas = input("\033[1;33m [+] Press Enter To Continue [+]")
                 os.system("clear")
             else:
@@ -162,6 +172,8 @@ def generate_password(length, use_uppercase, use_lowercase, use_special):
 def password_generator():
     while True:
         try:
+            os.system("figlet Password Generator")
+            print(" ")
             length = int(input("Enter the length of the password (1-50): "))
             if length < 1 or length > 50:
                 raise ValueError("Length must be between 1 and 50.")
@@ -172,7 +184,8 @@ def password_generator():
 
             password = generate_password(length, use_uppercase, use_lowercase, use_special)
             print(f"Generated Password: {password}")
-
+            
+            print (" ")
             magas = input("\033[1;33m [+] Press Enter To Continue [+]")
 
             os.system("clear")
