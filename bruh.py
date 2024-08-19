@@ -174,19 +174,27 @@ def password_generator():
             length = int(input("Enter the length of the password (1-50): "))
             if length < 1 or length > 50:
                 raise ValueError("Length must be between 1 and 50.")
-            break
+            
+            use_uppercase = input("Include uppercase letters? (y/n): ").strip().lower() == 'y'
+            use_lowercase = input("Include lowercase letters? (y/n): ").strip().lower() == 'y'
+            use_special = input("Include special characters? (y/n): ").strip().lower() == 'y'
+
+            password = generate_password(length, use_uppercase, use_lowercase, use_special)
+            print(f"Generated Password: {password}")
+
+            choice = input("\033[1;91mPress \033[1;36mENTER\033[1;91m to generate another password or \033[1;36m'M'\033[1;91m to return to the menu: ").strip().lower()
+            if choice == 'm':
+                os.system("clear")
+                return
+            os.system("clear")
+        
         except ValueError as e:
-            print(e)
-
-    use_uppercase = input("Include uppercase letters? (y/n): ").strip().lower() == 'y'
-    use_lowercase = input("Include lowercase letters? (y/n): ").strip().lower() == 'y'
-    use_special = input("Include special characters? (y/n): ").strip().lower() == 'y'
-
-    try:
-        password = generate_password(length, use_uppercase, use_lowercase, use_special)
-        print(f"Generated Password: {password}")
-    except ValueError as e:
-        print(e)
+            print(f"Error: {e}")
+        except KeyboardInterrupt:
+            os.system("clear")
+            return
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
 
 def about():
     try:
@@ -223,11 +231,11 @@ def main():
             os.system("figlet IPInfo | lolcat")
             slowprint(" ")
             slowprint ("\033[1;33m [ 1 ]\033[1;91m Scan IP Address")
-            slowprint ("\033[1;33m [ 2 ]\033[1;91m About This Tool")
             slowprint ("\033[1;33m [ 3 ]\033[1;91m DNS Lookup")
             slowprint ("\033[1;33m [ 4 ]\033[1;91m IP to Subnets")
             slowprint ("\033[1;33m [ 5 ]\033[1;91m IP to Binary")
             slowprint ("\033[1;33m [ 6 ]\033[1;91m Generate Password")
+            slowprint ("\033[1;33m [ 2 ]\033[1;91m About This Tool")
             slowprint ("\033[1;33m [ 0 ]\033[1;91m Exit")
             print("     ")
             option = input("\033[1;36m [+] IPInformation >> \033[1;32m")
