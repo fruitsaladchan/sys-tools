@@ -13,6 +13,7 @@ import ipaddress
 import math
 import random
 import string
+import nmap
 
 def slowprint(s, delay=1./200, newline=True):
     for c in s:
@@ -22,10 +23,6 @@ def slowprint(s, delay=1./200, newline=True):
     if newline:
         sys.stdout.write('\n')
         sys.stdout.flush()
-
-# def input(prompt, delay=1./200):
-    # slowprint(prompt, delay, newline=False)
-    # return input()  # Capture user input
 
 def ipinfo():
     while True:
@@ -43,7 +40,7 @@ def ipinfo():
             print ("\033[1;32m\007\n")
             os.system("figlet Sys Tools")
             slowprint("\033[1;36m =====================================")
-            slowprint("\033[1;33m|            IP Information           |")
+            slowprint("\033[1;33m |          IP Information           |")
             slowprint("\033[1;36m =====================================")
             slowprint("\033[1;36m" + "\n IP          : \033[1;32m " + values['query'])
             slowprint("\033[1;36m" + " Status      : \033[1;32m " + values['status'])
@@ -182,9 +179,9 @@ def password_generator():
         try:
             os.system("figlet Password Generator")
             print(" ")
-            length = int(input("Enter the length of the password (1-50): "))
-            if length < 1 or length > 50:
-                raise ValueError("Length must be between 1 and 50.")
+            length = int(input("Enter the length of the password (1-75): "))
+            if length < 1 or length > 75:
+                raise ValueError("Length must be between 1 and 75.")
             
             use_uppercase = input("Include uppercase letters? (y/n): ").strip().lower() == 'y'
             use_lowercase = input("Include lowercase letters? (y/n): ").strip().lower() == 'y'
@@ -206,6 +203,58 @@ def password_generator():
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
 
+
+def port_scanner():
+    while True:
+        try:
+            os.system("figlet Port Scanner")
+            print(" ")
+            target = input("Enter the target IP address or hostname: ")
+            port_range = input("Enter the port range to scan (e.g., '20-80'): ")
+
+            nm = nmap.PortScanner()
+            slowprint(f"\nScanning {target} for open ports in range {port_range}...")
+
+            nm.scan(target, port_range)
+            
+            for host in nm.all_hosts():
+                slowprint(f"\nHost: {host} ({nm[host].hostname()})")
+                slowprint(f"State: {nm[host].state()}")
+
+                for protocol in nm[host].all_protocols():
+                    slowprint(f"Protocol: {protocol}")
+
+                    ports = nm[host][protocol].keys()
+                    for port in sorted(ports):
+                        port_state = nm[host][protocol][port]['state']
+                        slowprint(f"Port: {port}\tState: {port_state}")
+
+            print(" ")
+            magas = input("\033[1;33m [+] Press Enter To Continue [+]")
+            os.system("clear")
+
+        except Exception as e:
+            slowprint(f"Error occurred: {str(e)}")
+        except KeyboardInterrupt:
+            os.system("clear")
+            return
+
+def whois_lookup():
+    try:
+        domain = input("Enter a domain to look up: ")
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect(("whois.iana.org", 43))
+        s.send(f"{domain}\r\n".encode())
+        response = s.recv(4096).decode()
+        s.close()
+        slowprint(response)
+        input("\033[1;33m [+] Press Enter To Continue [+]") 
+    except Exception as e:
+        slowprint(f"An error occurred: {str(e)}")
+        print(" ")
+        magas = input("\033[1;33m [+] Press Enter To Continue [+]")
+
+
 def about():
     try:
         os.system("clear")
@@ -218,6 +267,7 @@ def about():
         slowprint ("\033[1;33m" + "         [+] Latest Update =>\033[1;36m" + " 17/3/2023")
         slowprint ("\033[1;33m" + "         [+] Github        =>\033[1;36m" + " Github.com/fruitsaladchan")
         slowprint ("\033[1;91m -----------------------------------------------")
+        print(" ")
         magas = input("\033[1;33m [+] Press Enter To Continue [+]")
         os.system("clear")
         return
@@ -228,7 +278,7 @@ def about():
 
 def ext():
     slowprint ("\033[1;36m ==============================================")
-    slowprint ("\033[1;33m|      Thanks For Using IP-Information         |")
+    slowprint ("\033[1;33m |     Thanks For Using Sys Tools             |")
     slowprint ("\033[1;36m ==============================================")
     time.sleep(1)
     exit()
@@ -245,7 +295,9 @@ def main():
             slowprint ("\033[1;33m [ 3 ]\033[1;91m IP to Subnets")
             slowprint ("\033[1;33m [ 4 ]\033[1;91m IP to Binary")
             slowprint ("\033[1;33m [ 5 ]\033[1;91m Generate Password")
-            slowprint ("\033[1;33m [ 6 ]\033[1;91m About This Tool")
+            slowprint ("\033[1;33m [ 6 ]\033[1;91m Port Scanner")
+            slowprint ("\033[1;33m [ 7 ]\033[1;91m who is lookup")
+            slowprint ("\033[1;33m [ 8 ]\033[1;91m About This Tool")
             slowprint ("\033[1;33m [ 0 ]\033[1;91m Exit")
             print("     ")
             option = input("\033[1;36m [+] SysTools >> \033[1;32m")
@@ -270,6 +322,14 @@ def main():
                 password_generator()
 
             elif option == "6":
+                os.system("clear")
+                port_scanner()
+
+            elif option == "7":
+                os.system("clear")
+                whois_lookup()
+
+            elif option == "8":
                 os.system("clear")
                 about()
 
