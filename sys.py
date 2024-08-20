@@ -7,17 +7,25 @@ from platform import system
 import sys
 from datetime import datetime
 import time
+import readline
 import socket
 import ipaddress
 import math
 import random
 import string
 
-def slowprint(s):
-    for c in s + '\n':
+def slowprint(s, delay=1./200, newline=True):
+    for c in s:
         sys.stdout.write(c)
         sys.stdout.flush()
-        time.sleep(1. / 200)
+        time.sleep(delay)
+    if newline:
+        sys.stdout.write('\n')
+        sys.stdout.flush()
+
+# def input(prompt, delay=1./200):
+    # slowprint(prompt, delay, newline=False)
+    # return input()  # Capture user input
 
 def ipinfo():
     while True:
@@ -67,7 +75,7 @@ def dns_lookup():
             print(" ")
             domain = input("Enter a domain name (e.g., example.com): ")
             ip_address = socket.gethostbyname(domain)
-            print(f"The IP address for {domain} is: {ip_address}")
+            slowprint(f"The IP address for {domain} is: {ip_address}")
 
             print (" ")
             magas = input("\033[1;33m [+] Press Enter To Continue [+]")
@@ -75,12 +83,12 @@ def dns_lookup():
             os.system("clear")
 
         except socket.gaierror:
-            print(f"Error: Unable to resolve the domain {domain}.")
+            slowprint(f"Error: Unable to resolve the domain {domain}.")
         except KeyboardInterrupt:
             os.system("clear")
             return
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            slowprint(f"An unexpected error occurred: {e}")
 
 def ip_to_subnets():
     while True:
@@ -100,12 +108,12 @@ def ip_to_subnets():
             num_possible_subnets = 2**(new_prefix - network.prefixlen)
             subnet_mask = ipaddress.IPv4Network(f"0.0.0.0/{new_prefix}").netmask
 
-            print(f"\nTo create {num_subnets} subnets, the new subnet mask will be: {subnet_mask}")
-            print(f"You can create up to {num_possible_subnets} subnets with this configuration.\n")
+            slowprint(f"\nTo create {num_subnets} subnets, the new subnet mask will be: {subnet_mask}")
+            slowprint(f"You can create up to {num_possible_subnets} subnets with this configuration.\n")
 
             subnets = list(network.subnets(new_prefix=new_prefix))
-            print(f"{'Subnet':<10} {'Network Address':<20} {'First Host':<20} {'Last Host':<20} {'Broadcast Address':<20}")
-            print("-" * 90)
+            slowprint(f"{'Subnet':<10} {'Network Address':<20} {'First Host':<20} {'Last Host':<20} {'Broadcast Address':<20}")
+            slowprint("-" * 90)
             for i, subnet in enumerate(subnets, 1):
                 first_ip = subnet.network_address + 1
                 last_ip = subnet.broadcast_address - 1
@@ -131,7 +139,7 @@ def ip_to_binary():
             print(" ")
             ip = input("Please enter a valid IP address: ")
             if is_valid_ip(ip):
-                print(f"The binary representation of {ip} is: {ip_to_binary_func(ip)}")
+                slowprint(f"The binary representation of {ip} is: {ip_to_binary_func(ip)}")
 
                 print (" ")
                 magas = input("\033[1;33m [+] Press Enter To Continue [+]")
@@ -183,7 +191,7 @@ def password_generator():
             use_special = input("Include special characters? (y/n): ").strip().lower() == 'y'
 
             password = generate_password(length, use_uppercase, use_lowercase, use_special)
-            print(f"Generated Password: {password}")
+            slowprint(f"Generated Password: {password}")
             
             print (" ")
             magas = input("\033[1;33m [+] Press Enter To Continue [+]")
@@ -203,7 +211,7 @@ def about():
         os.system("clear")
         print ("\033[1;32m\007\n")
         os.system("figlet Sys Tool")
-        time.sleep(2)
+        print("")
         slowprint ("\033[1;91m -----------------------------------------------")
         slowprint ("\033[1;33m" + "         [+] Tool Name     =>\033[1;36m" + " Sys Tools")
         slowprint ("\033[1;33m" + "         [+] Author        =>\033[1;36m" + " fruitsaladchan ")
@@ -240,7 +248,7 @@ def main():
             slowprint ("\033[1;33m [ 6 ]\033[1;91m About This Tool")
             slowprint ("\033[1;33m [ 0 ]\033[1;91m Exit")
             print("     ")
-            option = input("\033[1;36m [+] IPInformation >> \033[1;32m")
+            option = input("\033[1;36m [+] SysTools >> \033[1;32m")
             if option == "1":
                 os.system("clear")
                 ipinfo()
@@ -277,7 +285,10 @@ def main():
 
         except KeyboardInterrupt:
             os.system("clear")
-            slowprint("\033[1;91m Exiting...\033[0m")
+            slowprint ("\033[1;36m ==============================================")
+            slowprint ("\033[1;33m |      Thanks For Using Sys Tools            |")
+            slowprint ("\033[1;36m ==============================================")
+
             time.sleep(1)
             os.system("clear")
             sys.exit()
