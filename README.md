@@ -6,3 +6,5 @@
 - ip to binary converter
 - subnet calculator
 - dns lookup
+- port scanner
+- who is lookup
