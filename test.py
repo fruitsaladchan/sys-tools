@@ -19,6 +19,12 @@ def slowprint(s):
         sys.stdout.flush()
         time.sleep(1. / 200)
 
+def clear_screen():
+    if system() == "Windows":
+        os.system('cls')
+    else:
+        os.system('clear')
+
 def ipinfo():
     while True:
         try:
@@ -30,7 +36,7 @@ def ipinfo():
             response = urllib.request.urlopen(url + ip)
             data = response.read()
             values = json.loads(data)
-            os.system("clear")
+            clear_screen()
 
             slowprint("\033[1;32m\007\n")
             os.system("figlet Sys Tools")
@@ -54,10 +60,10 @@ def ipinfo():
             
             magas = input("\033[1;33m [+] Press Enter To Continue [+]")
 
-            os.system("clear")
+            clear_screen()
 
         except KeyboardInterrupt:
-            os.system("clear")
+            clear_screen()
             return
 
 def dns_lookup():
@@ -72,12 +78,12 @@ def dns_lookup():
             slowprint(" ")
             magas = input("\033[1;33m [+] Press Enter To Continue [+]")
 
-            os.system("clear")
+            clear_screen()
 
         except socket.gaierror:
             slowprint(f"Error: Unable to resolve the domain {domain}.")
         except KeyboardInterrupt:
-            os.system("clear")
+            clear_screen()
             return
         except Exception as e:
             slowprint(f"An unexpected error occurred: {e}")
@@ -114,12 +120,12 @@ def ip_to_subnets():
             slowprint(" ")
             magas = input("\033[1;33m [+] Press Enter To Continue [+]")
 
-            os.system("clear")
+            clear_screen()
 
         except ValueError as e:
             slowprint(f"Error: {e}")
         except KeyboardInterrupt:
-            os.system("clear")
+            clear_screen()
             return
         except Exception as e:
             slowprint(f"An unexpected error occurred: {e}")
@@ -135,12 +141,12 @@ def ip_to_binary():
 
                 slowprint(" ")
                 magas = input("\033[1;33m [+] Press Enter To Continue [+]")
-                os.system("clear")
+                clear_screen()
             else:
                 slowprint("Invalid IP address. Please try again.")
 
         except KeyboardInterrupt:
-            os.system("clear")
+            clear_screen()
             return
 
 def is_valid_ip(ip):
@@ -188,19 +194,19 @@ def password_generator():
             slowprint(" ")
             magas = input("\033[1;33m [+] Press Enter To Continue [+]")
 
-            os.system("clear")
+            clear_screen()
         
         except ValueError as e:
             slowprint(f"Error: {e}")
         except KeyboardInterrupt:
-            os.system("clear")
+            clear_screen()
             return
         except Exception as e:
             slowprint(f"An unexpected error occurred: {e}")
 
 def about():
     try:
-        os.system("clear")
+        clear_screen()
         slowprint("\033[1;32m\007\n")
         os.system("figlet Sys Tool")
         time.sleep(2)
@@ -211,16 +217,24 @@ def about():
         slowprint("\033[1;33m" + "         [+] Github        =>\033[1;36m" + " Github.com/fruitsaladchan")
         slowprint("\033[1;91m -----------------------------------------------")
         magas = input("\033[1;33m [+] Press Enter To Continue [+]")
-
-        os.system("clear")
-    except KeyboardInterrupt:
-        os.system("clear")
+        clear_screen()
         return
+
+    except KeyboardInterrupt:
+        clear_screen()
+        return
+
+def ext():
+    slowprint("\033[1;36m ==============================================")
+    slowprint("\033[1;33m|      Thanks For Using IP-Information         |")
+    slowprint("\033[1;36m ==============================================")
+    time.sleep(1)
+    exit()
 
 def main_menu():
     while True:
         try:
-            os.system("clear")
+            clear_screen()
             slowprint("\033[1;32m\007\n")
             os.system("figlet Sys Tool")
             slowprint("\033[1;91m -----------------------------------------------")
@@ -252,7 +266,7 @@ def main_menu():
                 slowprint("\033[1;31m Invalid option, please try again.")
 
         except KeyboardInterrupt:
-            os.system("clear")
+            clear_screen()
             return
 
 if __name__ == '__main__':
