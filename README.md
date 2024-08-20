@@ -1,6 +1,7 @@
 # sysadmin-tools
 
-- include ip scanner
+# includes
+- ip scanner
 - password generator
 - ip to binary converter
 - subnet calculator
