@@ -16,7 +16,7 @@ import string
 import psutil
 import nmap
 
-def slowprint(s, delay=1./200, newline=True):
+def slowprint(s, delay=1./300, newline=True):
     for c in s:
         sys.stdout.write(c)
         sys.stdout.flush()
