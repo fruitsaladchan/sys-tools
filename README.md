@@ -1,6 +1,6 @@
 # sysadmin-tools
 
-i dont know python :(
+bad at python, messy code :(
 
 ### includes
 - ip scanner
@@ -11,6 +11,8 @@ i dont know python :(
 - port scanner
 - who is lookup
 - network monitor
+- cidr to mask
+- mask to cidr
 
 ## requirments
 
