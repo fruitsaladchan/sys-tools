@@ -91,7 +91,7 @@ def dns_lookup():
 def ip_to_subnets():
     while True:
         try:
-            os.system("figlet IP to Subnet")
+            os.system("figlet Subnet calculator")
             print(" ")
             ip_input = input("Enter an IP address (e.g., 10.1.1.0/24): ")
             network = ipaddress.IPv4Network(ip_input, strict=False)
@@ -135,29 +135,68 @@ def ip_to_binary():
         try:
             os.system("figlet Ip to Binary")
             print(" ")
-            ip = input("Please enter a valid IP address: ")
-            if is_valid_ip(ip):
-                slowprint(f"The binary representation of {ip} is: {ip_to_binary_func(ip)}")
+            ip_cidr = input("Please enter a valid IP address with CIDR notation (e.g., 192.168.2.22/24): ")
+            
+            if '/' not in ip_cidr:
+                print("You forgot to include the CIDR notation. Please try again.")
+                continue
 
-                print (" ")
+            if is_valid_ip_cidr(ip_cidr):
+                ip, cidr = ip_cidr.split('/')
+                cidr = int(cidr)
+                mask = cidr_to_subnet_mask(cidr)
+                slowprint(f"Original value: {ip}/{cidr}")
+                slowprint(f"Mask: {mask}")
+
+                signed_ip_bin = signed_binary_ip(ip, cidr)
+                ip_bin = ip_to_binary_func(ip)
+                signed_mask_bin = signed_binary_mask(cidr)
+                mask_bin = ip_to_binary_func(mask)
+
+                slowprint(f"Signed IP Binary: {signed_ip_bin}")
+                slowprint(f"IP Binary: {ip_bin}")
+
+                slowprint(f"Signed Mask Binary: {signed_mask_bin}")
+                slowprint(f"Mask Binary: {mask_bin}")
+
+                print(" ")
                 magas = input("\033[1;33m [+] Press Enter To Continue [+]")
                 os.system("clear")
             else:
-                print("Invalid IP address. Please try again.")
+                print("Invalid IP address or CIDR notation. Please try again.")
 
         except KeyboardInterrupt:
             os.system("clear")
             return
 
-def is_valid_ip(ip):
+def is_valid_ip_cidr(ip_cidr):
     try:
-        ipaddress.ip_address(ip)
+        ipaddress.ip_interface(ip_cidr)
         return True
     except ValueError:
         return False
 
+def cidr_to_subnet_mask(cidr):
+    return str(ipaddress.IPv4Network(f'0.0.0.0/{cidr}').netmask)
+
 def ip_to_binary_func(ip):
     return '.'.join(format(int(octet), '08b') for octet in ip.split('.'))
+
+def signed_binary_ip(ip, cidr):
+    binary_ip = ip_to_binary_func(ip).split('.')
+    full_octets = cidr // 8
+    remaining_bits = cidr % 8
+    for i in range(4):
+        if i < full_octets:
+            binary_ip[i] = binary_ip[i]
+        else:
+            binary_ip[i] = binary_ip[i][:remaining_bits]
+    return '.'.join(binary_ip)
+
+def signed_binary_mask(cidr):
+    mask = cidr_to_subnet_mask(cidr)
+    return signed_binary_ip(mask, cidr)
+
 
 def generate_password(length, use_uppercase, use_lowercase, use_special):
     characters = ""
@@ -306,6 +345,102 @@ def network_monitor():
         magas = input("\033[1;33m [+] Press Enter To Return [+]")
         os.system("clear")
 
+
+def cidr_to_mask(cidr_input):
+    try:
+        cidr = int(cidr_input)
+    except ValueError:
+        return "Error: Invalid input. Please enter a number between 0 and 32."
+
+    if cidr > 32 or cidr < 0:
+        return "Error: CIDR value must be between 0 and 32."
+
+    mask = []
+    y = 0
+    z = [1] * cidr
+
+    for i in range(len(z)):
+        math = i % 8
+        if math == 0:
+            if i >= 8:
+                mask.append(y)
+                y = 0
+        y += pow(2, 7 - math)
+    mask.append(y)
+    [mask.append(0) for _ in range(4 - len(mask))]
+    mask = ".".join([str(i) for i in mask])
+    return mask
+
+def run_cidr_to_mask():
+    os.system("figlet cidr to Mask")
+
+    try:
+        while True:
+            print(" ")
+            cidr_input = input("Enter a CIDR value (e.g., 24) or press Enter to exit: ")
+            
+            if not cidr_input:
+                break
+            
+            mask = cidr_to_mask(cidr_input)
+            
+            if "Error" in mask:
+                print(mask)
+            else:
+                slowprint(f"The subnet mask for CIDR /{cidr_input} is: {mask}")
+            
+            print(" ")
+            magas = input("\033[1;33m [+] Press Enter To Continue [+]")
+
+        os.system("clear")
+
+    except KeyboardInterrupt:
+        os.system("clear")
+        return
+
+def mask_to_cidr(mask):
+    # Split the mask into its octets and convert each to binary
+    try:
+        binary_str = ''.join([bin(int(x)).lstrip('0b').zfill(8) for x in mask.split('.')])
+    except ValueError:
+        return "Error: Invalid subnet mask format."
+
+    # Validate the mask format
+    if len(mask.split('.')) != 4 or any(int(octet) > 255 for octet in mask.split('.')):
+        return "Error: Subnet mask must be in the format X.X.X.X with each octet between 0 and 255."
+
+    # Count the number of '1's in the binary representation to get the CIDR
+    cidr = str(binary_str.count('1'))
+    
+    # Ensure the CIDR value does not exceed 32
+    if int(cidr) > 32 or int(cidr) < 0:
+        return "Error: Subnet mask results in an invalid CIDR value."
+
+    return cidr
+
+def run_mask_to_cidr():
+    try:
+        while True:
+            mask_input = input("Enter a subnet mask (e.g., 255.255.255.0) or press Enter to exit: ")
+            
+            if not mask_input:
+                break
+            
+            cidr = mask_to_cidr(mask_input)
+            
+            if "Error" in cidr:
+                print(cidr)
+            else:
+                slowprint(f"The CIDR notation for subnet mask {mask_input} is: /{cidr}")
+            
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]")
+            os.system("clear")
+
+    except KeyboardInterrupt:
+        os.system("clear")
+        return
+
 def about():
     try:
         os.system("clear")
@@ -341,16 +476,18 @@ def main():
             print("\033[1;36m")
             os.system("figlet Sys Tools")
             slowprint(" ")
-            slowprint ("\033[1;33m [ 1 ]\033[1;91m Scan IP Address")
-            slowprint ("\033[1;33m [ 2 ]\033[1;91m DNS Lookup")
-            slowprint ("\033[1;33m [ 3 ]\033[1;91m IP to Subnets")
-            slowprint ("\033[1;33m [ 4 ]\033[1;91m IP to Binary")
-            slowprint ("\033[1;33m [ 5 ]\033[1;91m Generate Password")
-            slowprint ("\033[1;33m [ 6 ]\033[1;91m Port Scanner")
-            slowprint ("\033[1;33m [ 7 ]\033[1;91m who is lookup")
-            slowprint ("\033[1;33m [ 8 ]\033[1;91m Network Monitor")
-            slowprint ("\033[1;33m [ 9 ]\033[1;91m About This Tool")
-            slowprint ("\033[1;33m [ 0 ]\033[1;91m Exit")
+            slowprint ("\033[1;33m [ 1  ]\033[1;91m Scan IP Address")
+            slowprint ("\033[1;33m [ 2  ]\033[1;91m DNS Lookup")
+            slowprint ("\033[1;33m [ 3  ]\033[1;91m Subnets calculator")
+            slowprint ("\033[1;33m [ 4  ]\033[1;91m IP to Binary")
+            slowprint ("\033[1;33m [ 5  ]\033[1;91m Generate Password")
+            slowprint ("\033[1;33m [ 6  ]\033[1;91m Port Scanner")
+            slowprint ("\033[1;33m [ 7  ]\033[1;91m who is lookup")
+            slowprint ("\033[1;33m [ 8  ]\033[1;91m Network Monitor")
+            slowprint ("\033[1;33m [ 10 ]\033[1;91m cidr to mask")
+            slowprint ("\033[1;33m [ 11 ]\033[1;91m mask to cidr")
+            slowprint ("\033[1;33m [ 12 ]\033[1;91m About This Tool")
+            slowprint ("\033[1;33m [ 0  ]\033[1;91m Exit")
             print("     ")
             option = input("\033[1;36m [+] SysTools >> \033[1;32m")
             if option == "1":
@@ -385,7 +522,15 @@ def main():
                 os.system("clear")
                 network_monitor()
 
-            elif option == "9":
+            elif option == "10":
+                os.system("clear")
+                run_cidr_to_mask()
+
+            elif option == "11":
+                os.system("clear")
+                run_mask_to_cidr()
+
+            elif option == "12":
                 os.system("clear")
                 about()
 
