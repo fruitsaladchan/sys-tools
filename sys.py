@@ -324,7 +324,7 @@ def network_monitor():
             
             old_value = new_value
 
-            print("\033[2J\033[H", end="")  # ANSI escape code to clear screen and return cursor to top
+            print("\033[2J\033[H", end="") 
             print("\033[1;33m [+] Press Ctrl+C to stop monitoring")
             print("\033[1;32m")
             print(f"\033[1;34mNetwork Monitoring:")
@@ -399,20 +399,16 @@ def run_cidr_to_mask():
         return
 
 def mask_to_cidr(mask):
-    # Split the mask into its octets and convert each to binary
     try:
         binary_str = ''.join([bin(int(x)).lstrip('0b').zfill(8) for x in mask.split('.')])
     except ValueError:
         return "Error: Invalid subnet mask format."
 
-    # Validate the mask format
     if len(mask.split('.')) != 4 or any(int(octet) > 255 for octet in mask.split('.')):
         return "Error: Subnet mask must be in the format X.X.X.X with each octet between 0 and 255."
 
-    # Count the number of '1's in the binary representation to get the CIDR
     cidr = str(binary_str.count('1'))
     
-    # Ensure the CIDR value does not exceed 32
     if int(cidr) > 32 or int(cidr) < 0:
         return "Error: Subnet mask results in an invalid CIDR value."
 
@@ -516,20 +512,32 @@ def main():
             print("\033[1;36m")
             os.system("figlet Sys Tools")
             slowprint(" ")
-            slowprint ("\033[1;33m [ 1  ]\033[1;91m Scan IP Address")
-            slowprint ("\033[1;33m [ 2  ]\033[1;91m DNS Lookup")
-            slowprint ("\033[1;33m [ 3  ]\033[1;91m Subnets calculator")
-            slowprint ("\033[1;33m [ 4  ]\033[1;91m IP to Binary")
-            slowprint ("\033[1;33m [ 5  ]\033[1;91m Binary to Ip")
-            slowprint ("\033[1;33m [ 6  ]\033[1;91m Generate Password")
-            slowprint ("\033[1;33m [ 7  ]\033[1;91m Port Scanner")
-            slowprint ("\033[1;33m [ 8  ]\033[1;91m who is lookup")
-            slowprint ("\033[1;33m [ 9  ]\033[1;91m Network Monitor")
-            slowprint ("\033[1;33m [ 11 ]\033[1;91m cidr to mask")
-            slowprint ("\033[1;33m [ 12 ]\033[1;91m mask to cidr")
-            slowprint ("\033[1;33m [ 13 ]\033[1;91m About This Tool")
-            slowprint ("\033[1;33m [ 0  ]\033[1;91m Exit")
+
+            column1 = [
+                "\033[1;33m [ 1  ]\033[1;91m Scan IP Address",
+                "\033[1;33m [ 2  ]\033[1;91m DNS Lookup",
+                "\033[1;33m [ 3  ]\033[1;91m Subnets calculator",
+                "\033[1;33m [ 4  ]\033[1;91m IP to Binary",
+                "\033[1;33m [ 5  ]\033[1;91m Binary to IP",
+                "\033[1;33m [ 6  ]\033[1;91m Generate Password",
+            ]
+
+            column2 = [
+                "\033[1;33m [ 7  ]\033[1;91m Port Scanner",
+                "\033[1;33m [ 8  ]\033[1;91m WHOIS Lookup",
+                "\033[1;33m [ 9  ]\033[1;91m Network Monitor",
+                "\033[1;33m [ 11 ]\033[1;91m CIDR to Mask",
+                "\033[1;33m [ 12 ]\033[1;91m Mask to CIDR",
+                "\033[1;33m [ 13 ]\033[1;91m About This Tool",
+            ]
+
+            for i in range(len(column1)):
+                slowprint(f"{column1[i]:<50} {column2[i]}")
+
             print("     ")
+            slowprint("\033[1;33m [ 0  ]\033[1;91m Exit")
+            print("     ")
+
             option = input("\033[1;36m [+] SysTools >> \033[1;32m")
             if option == "1":
                 os.system("clear")
@@ -585,7 +593,7 @@ def main():
 
             else:
                 os.system("clear")
-                slowprint ("\033[1;91m Enter Correct Number!!!")
+                slowprint("\033[1;91m Enter Correct Number!!!")
                 time.sleep(2)
                 os.system("clear")
 
