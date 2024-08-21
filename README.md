@@ -1,11 +1,12 @@
 # sysadmin-tools
 
-bad at python, messy code :(
+bad at python, messy code :( tried to fit all into one file
 
 ### includes
 - ip scanner
 - password generator
 - ip to binary converter
+- binary to ip converter
 - subnet calculator
 - dns lookup
 - port scanner
