@@ -8,3 +8,4 @@
 - dns lookup
 - port scanner
 - who is lookup
+- network monitor
