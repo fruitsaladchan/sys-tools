@@ -306,45 +306,52 @@ def format_bytes(size):
     return f"{size:.2f} {power_labels[n]}B"
 
 def network_monitor():
-    try:
-        os.system("clear")
-        
-        total_sent = 0
-        total_recv = 0
-
-        initial_value = psutil.net_io_counters()
-        old_value = initial_value
-        
-        while True:
-            new_value = psutil.net_io_counters()
-            sent = new_value.bytes_sent - old_value.bytes_sent
-            recv = new_value.bytes_recv - old_value.bytes_recv
-            total_sent += sent
-            total_recv += recv
+    while True:
+        try:
+            os.system("clear")
             
-            old_value = new_value
+            total_sent = 0
+            total_recv = 0
 
-            print("\033[2J\033[H", end="") 
-            print("\033[1;33m [+] Press Ctrl+C to stop monitoring")
-            print("\033[1;32m")
-            print(f"\033[1;34mNetwork Monitoring:")
-            print(f"\033[1;32mTotal Bytes Sent: {format_bytes(total_sent)}")
-            print(f"Total Bytes Received: {format_bytes(total_recv)}")
-            print(f"Packets Sent: {new_value.packets_sent - initial_value.packets_sent}")
-            print(f"Packets Received: {new_value.packets_recv - initial_value.packets_recv}")
-            print(f"Errors In: {new_value.errin - initial_value.errin}")
-            print(f"Errors Out: {new_value.errout - initial_value.errout}")
-            print(f"Dropped Packets In: {new_value.dropin - initial_value.dropin}")
-            print(f"Dropped Packets Out: {new_value.dropout - initial_value.dropout}")
+            initial_value = psutil.net_io_counters()
+            old_value = initial_value
             
-            time.sleep(1)
+            while True:
+                new_value = psutil.net_io_counters()
+                sent = new_value.bytes_sent - old_value.bytes_sent
+                recv = new_value.bytes_recv - old_value.bytes_recv
+                total_sent += sent
+                total_recv += recv
+                
+                old_value = new_value
 
-    except KeyboardInterrupt:
-        slowprint("\n\033[1;31m Monitoring stopped.")
-        print("")
-        magas = input("\033[1;33m [+] Press Enter To Return [+]")
-        os.system("clear")
+                print("\033[2J\033[H", end="") 
+                print("\033[1;33m [+] Press Ctrl+C to stop monitoring")
+                print("\033[1;32m")
+                print(f"\033[1;34mNetwork Monitoring:")
+                print(f"\033[1;32mTotal Bytes Sent: {format_bytes(total_sent)}")
+                print(f"Total Bytes Received: {format_bytes(total_recv)}")
+                print(f"Packets Sent: {new_value.packets_sent - initial_value.packets_sent}")
+                print(f"Packets Received: {new_value.packets_recv - initial_value.packets_recv}")
+                print(f"Errors In: {new_value.errin - initial_value.errin}")
+                print(f"Errors Out: {new_value.errout - initial_value.errout}")
+                print(f"Dropped Packets In: {new_value.dropin - initial_value.dropin}")
+                print(f"Dropped Packets Out: {new_value.dropout - initial_value.dropout}")
+                
+                time.sleep(1)
 
+        except KeyboardInterrupt:
+            slowprint("\n\033[1;31m Monitoring stopped.")
+            print("")
+            try:
+                magas = input("\033[1;33m [+] Press Enter to restart or Ctrl+C to return [+] ")
+                if magas == "":
+                    continue  
+            except KeyboardInterrupt:
+                break  
+
+    os.system("clear")
+    return 
 
 def cidr_to_mask(cidr_input):
     try:
@@ -415,6 +422,7 @@ def mask_to_cidr(mask):
     return cidr
 
 def run_mask_to_cidr():
+    os.system("figlet mask to cidr")
     try:
         while True:
             mask_input = input("Enter a subnet mask (e.g., 255.255.255.0) or press Enter to exit: ")
@@ -516,7 +524,7 @@ def main():
             column1 = [
                 "\033[1;33m [ 1  ]\033[1;91m Scan IP Address",
                 "\033[1;33m [ 2  ]\033[1;91m DNS Lookup",
-                "\033[1;33m [ 3  ]\033[1;91m Subnets calculator",
+                "\033[1;33m [ 3  ]\033[1;91m ipv4 Subnet calculator",
                 "\033[1;33m [ 4  ]\033[1;91m IP to Binary",
                 "\033[1;33m [ 5  ]\033[1;91m Binary to IP",
                 "\033[1;33m [ 6  ]\033[1;91m Generate Password",
@@ -594,7 +602,7 @@ def main():
             else:
                 os.system("clear")
                 slowprint("\033[1;91m Enter Correct Number!!!")
-                time.sleep(2)
+                time.sleep(1)
                 os.system("clear")
 
         except KeyboardInterrupt:
