@@ -441,6 +441,46 @@ def run_mask_to_cidr():
         os.system("clear")
         return
 
+def binary_to_ip(binary):
+    octets = binary.split('.')
+    ip = '.'.join(str(int(octet, 2)) for octet in octets)
+    return ip
+
+def is_valid_binary(binary):
+    octets = binary.split('.')
+    if len(octets) != 4:
+        return False
+    for octet in octets:
+        if len(octet) != 8 or not all(bit in '01' for bit in octet):
+            return False
+    return True
+
+def run_binary_to_ip():
+    os.system("figlet Binary to IP")
+
+    try:
+        while True:
+            print(" ")
+            binary_input = input("Enter a binary IP (e.g., 11000000.10101000.00000001.00000001) or press Enter to exit: ")
+            
+            if not binary_input:
+                break
+            
+            if is_valid_binary(binary_input):
+                ip = binary_to_ip(binary_input)
+                slowprint(f"The IP address for binary {binary_input} is: {ip}")
+            else:
+                slowprint("Error: Invalid binary IP format. Please enter in the format 8.8.8.8, with each octet as an 8-bit binary number.")
+
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]")
+
+        os.system("clear")
+
+    except KeyboardInterrupt:
+        os.system("clear")
+        return
+
 def about():
     try:
         os.system("clear")
@@ -480,13 +520,14 @@ def main():
             slowprint ("\033[1;33m [ 2  ]\033[1;91m DNS Lookup")
             slowprint ("\033[1;33m [ 3  ]\033[1;91m Subnets calculator")
             slowprint ("\033[1;33m [ 4  ]\033[1;91m IP to Binary")
-            slowprint ("\033[1;33m [ 5  ]\033[1;91m Generate Password")
-            slowprint ("\033[1;33m [ 6  ]\033[1;91m Port Scanner")
-            slowprint ("\033[1;33m [ 7  ]\033[1;91m who is lookup")
-            slowprint ("\033[1;33m [ 8  ]\033[1;91m Network Monitor")
-            slowprint ("\033[1;33m [ 10 ]\033[1;91m cidr to mask")
-            slowprint ("\033[1;33m [ 11 ]\033[1;91m mask to cidr")
-            slowprint ("\033[1;33m [ 12 ]\033[1;91m About This Tool")
+            slowprint ("\033[1;33m [ 5  ]\033[1;91m Binary to Ip")
+            slowprint ("\033[1;33m [ 6  ]\033[1;91m Generate Password")
+            slowprint ("\033[1;33m [ 7  ]\033[1;91m Port Scanner")
+            slowprint ("\033[1;33m [ 8  ]\033[1;91m who is lookup")
+            slowprint ("\033[1;33m [ 9  ]\033[1;91m Network Monitor")
+            slowprint ("\033[1;33m [ 11 ]\033[1;91m cidr to mask")
+            slowprint ("\033[1;33m [ 12 ]\033[1;91m mask to cidr")
+            slowprint ("\033[1;33m [ 13 ]\033[1;91m About This Tool")
             slowprint ("\033[1;33m [ 0  ]\033[1;91m Exit")
             print("     ")
             option = input("\033[1;36m [+] SysTools >> \033[1;32m")
@@ -508,29 +549,33 @@ def main():
 
             elif option == "5":
                 os.system("clear")
-                password_generator()
+                run_binary_to_ip()
 
             elif option == "6":
                 os.system("clear")
-                port_scanner()
+                password_generator()
 
             elif option == "7":
                 os.system("clear")
-                whois_lookup()
+                port_scanner()
 
             elif option == "8":
                 os.system("clear")
-                network_monitor()
+                whois_lookup()
 
-            elif option == "10":
+            elif option == "9":
                 os.system("clear")
-                run_cidr_to_mask()
+                network_monitor()
 
             elif option == "11":
                 os.system("clear")
-                run_mask_to_cidr()
+                run_cidr_to_mask()
 
             elif option == "12":
+                os.system("clear")
+                run_mask_to_cidr()
+
+            elif option == "13":
                 os.system("clear")
                 about()
 
