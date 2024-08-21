@@ -13,6 +13,7 @@ import ipaddress
 import math
 import random
 import string
+import psutil
 import nmap
 
 def slowprint(s, delay=1./200, newline=True):
@@ -255,6 +256,56 @@ def whois_lookup():
         magas = input("\033[1;33m [+] Press Enter To Continue [+]")
 
 
+def format_bytes(size):
+    # 2**10 = 1024
+    power = 1024
+    n = 0
+    power_labels = {0: '', 1: 'K', 2: 'M', 3: 'G', 4: 'T'}
+    while size > power:
+        size /= power
+        n += 1
+    return f"{size:.2f} {power_labels[n]}B"
+
+def network_monitor():
+    try:
+        os.system("clear")
+        
+        total_sent = 0
+        total_recv = 0
+
+        initial_value = psutil.net_io_counters()
+        old_value = initial_value
+        
+        while True:
+            new_value = psutil.net_io_counters()
+            sent = new_value.bytes_sent - old_value.bytes_sent
+            recv = new_value.bytes_recv - old_value.bytes_recv
+            total_sent += sent
+            total_recv += recv
+            
+            old_value = new_value
+
+            print("\033[2J\033[H", end="")  # ANSI escape code to clear screen and return cursor to top
+            print("\033[1;33m [+] Press Ctrl+C to stop monitoring")
+            print("\033[1;32m")
+            print(f"\033[1;34mNetwork Monitoring:")
+            print(f"\033[1;32mTotal Bytes Sent: {format_bytes(total_sent)}")
+            print(f"Total Bytes Received: {format_bytes(total_recv)}")
+            print(f"Packets Sent: {new_value.packets_sent - initial_value.packets_sent}")
+            print(f"Packets Received: {new_value.packets_recv - initial_value.packets_recv}")
+            print(f"Errors In: {new_value.errin - initial_value.errin}")
+            print(f"Errors Out: {new_value.errout - initial_value.errout}")
+            print(f"Dropped Packets In: {new_value.dropin - initial_value.dropin}")
+            print(f"Dropped Packets Out: {new_value.dropout - initial_value.dropout}")
+            
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+        slowprint("\n\033[1;31m Monitoring stopped.")
+        print("")
+        magas = input("\033[1;33m [+] Press Enter To Return [+]")
+        os.system("clear")
+
 def about():
     try:
         os.system("clear")
@@ -297,7 +348,8 @@ def main():
             slowprint ("\033[1;33m [ 5 ]\033[1;91m Generate Password")
             slowprint ("\033[1;33m [ 6 ]\033[1;91m Port Scanner")
             slowprint ("\033[1;33m [ 7 ]\033[1;91m who is lookup")
-            slowprint ("\033[1;33m [ 8 ]\033[1;91m About This Tool")
+            slowprint ("\033[1;33m [ 8 ]\033[1;91m Network Monitor")
+            slowprint ("\033[1;33m [ 9 ]\033[1;91m About This Tool")
             slowprint ("\033[1;33m [ 0 ]\033[1;91m Exit")
             print("     ")
             option = input("\033[1;36m [+] SysTools >> \033[1;32m")
@@ -330,6 +382,10 @@ def main():
                 whois_lookup()
 
             elif option == "8":
+                os.system("clear")
+                network_monitor()
+
+            elif option == "9":
                 os.system("clear")
                 about()
 
