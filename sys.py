@@ -485,7 +485,7 @@ def about():
     try:
         os.system("clear")
         print ("\033[1;32m\007\n")
-        os.system("figlet Sys Tool")
+        os.system("figlet Sys Tools")
         print("")
         slowprint ("\033[1;91m -----------------------------------------------")
         slowprint ("\033[1;33m" + "         [+] Tool Name     =>\033[1;36m" + " Sys Tools")
