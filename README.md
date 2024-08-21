@@ -1,5 +1,7 @@
 # sysadmin-tools
 
+i dont know python :(
+
 ### includes
 - ip scanner
 - password generator
