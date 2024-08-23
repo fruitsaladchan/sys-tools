@@ -510,7 +510,7 @@ def ext():
     slowprint ("\033[1;36m ==============================================")
     slowprint ("\033[1;33m |     Thanks For Using Sys Tools             |")
     slowprint ("\033[1;36m ==============================================")
-    time.sleep(1)
+    print(" ")
     exit()
 
 def main():
@@ -610,9 +610,7 @@ def main():
             slowprint ("\033[1;36m ==============================================")
             slowprint ("\033[1;33m |      Thanks For Using Sys Tools            |")
             slowprint ("\033[1;36m ==============================================")
-
-            time.sleep(1)
-            os.system("clear")
+            print(" ")
             sys.exit()
 
 if __name__ == "__main__":
