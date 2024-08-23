@@ -485,6 +485,93 @@ def run_binary_to_ip():
         os.system("clear")
         return
 
+
+def ipv4_to_ipv6(ipv4_address):
+    try:
+        ipv4 = ipaddress.IPv4Address(ipv4_address)
+        ipv6 = ipaddress.IPv6Address('::ffff:' + str(ipv4))
+        return str(ipv6)
+    except ipaddress.AddressValueError:
+        return "Invalid IPv4 address"
+
+def ipv6_to_ipv4(ipv6_address):
+    try:
+        ipv6 = ipaddress.IPv6Address(ipv6_address)
+        if ipv6.ipv4_mapped:
+            return str(ipv6.ipv4_mapped)
+        else:
+            return "IPv6 address does not map to an IPv4 address"
+    except ipaddress.AddressValueError:
+        return "Invalid IPv6 address"
+
+def validate_ip(ip_address):
+    try:
+        # Try to parse as both IPv4 and IPv6
+        ipaddress.ip_address(ip_address)
+        return True
+    except ValueError:
+        return False
+
+def run_ipv4_to_ipv6():
+    while True:
+        try:
+            os.system("figlet ipv4 to ipv6")
+            print(" ")
+            ipv4_address = input("Enter an IPv4 address: ")
+            if ipv4_address == "":
+                continue
+            
+            ipv6_address = ipaddress.IPv6Address('::ffff:' + ipv4_address)
+            ipv6_compressed = str(ipv6_address)
+            ipv6_expanded_short = ipv6_address.exploded
+            ipv6_expanded_full = ipv6_expanded_short.replace('0000', '0')
+
+            print(" ")
+            slowprint(f"IPV6 Compressed: {ipv6_compressed}")
+            slowprint(f"IPV6 Expanded (Shortened): {ipv6_expanded_full}")
+            slowprint(f"IPV6 Expanded: {ipv6_expanded_short}")
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]")
+            os.system("clear")
+        except KeyboardInterrupt:
+            os.system("clear")
+            return
+        except ipaddress.AddressValueError:
+            print(" ")
+            slowprint("Invalid IPv4 address")
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]")
+            os.system("clear")
+
+def run_ipv6_to_ipv4():
+    while True:
+        try:
+            os.system("figlet ipv6 to ipv4")
+            print(" ")
+            ipv6_address = input("Enter an IPv6 address: ")
+            if ipv6_address == "":
+                continue
+
+            ipv6 = ipaddress.IPv6Address(ipv6_address)
+
+            ipv4_mapped = ipv6.ipv4_mapped
+            if ipv4_mapped:
+                slowprint(f"IPv4 address: {ipv4_mapped}")
+            else:
+                slowprint("This IPv6 address does not map to an IPv4 address.")
+            
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]")
+            os.system("clear")
+        except KeyboardInterrupt:
+            os.system("clear")
+            return
+        except ipaddress.AddressValueError:
+            slowprint("Invalid IPv6 address")
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]")
+            os.system("clear")
+
 def about():
     try:
         os.system("clear")
@@ -534,9 +621,11 @@ def main():
                 "\033[1;33m [ 7  ]\033[1;91m Port Scanner",
                 "\033[1;33m [ 8  ]\033[1;91m WHOIS Lookup",
                 "\033[1;33m [ 9  ]\033[1;91m Network Monitor",
-                "\033[1;33m [ 11 ]\033[1;91m CIDR to Mask",
-                "\033[1;33m [ 12 ]\033[1;91m Mask to CIDR",
-                "\033[1;33m [ 13 ]\033[1;91m About This Tool",
+                "\033[1;33m [ 10 ]\033[1;91m IPv4 to IPv6",  # New option
+                "\033[1;33m [ 11 ]\033[1;91m IPv6 to IPv4",  # New option
+                "\033[1;33m [ 12 ]\033[1;91m CIDR to Mask",
+                "\033[1;33m [ 13 ]\033[1;91m Mask to CIDR",
+                "\033[1;33m [ 14 ]\033[1;91m About This Tool",
             ]
 
             for i in range(len(column1)):
@@ -583,15 +672,23 @@ def main():
                 os.system("clear")
                 network_monitor()
 
+            elif option == "10":
+                os.system("clear")
+                run_ipv4_to_ipv6()
+
             elif option == "11":
                 os.system("clear")
-                run_cidr_to_mask()
+                run_ipv6_to_ipv4()
 
             elif option == "12":
                 os.system("clear")
-                run_mask_to_cidr()
+                run_cidr_to_mask()
 
             elif option == "13":
+                os.system("clear")
+                run_mask_to_cidr()
+
+            elif option == "14":
                 os.system("clear")
                 about()
 
