@@ -14,6 +14,8 @@ bad at python, messy code :(
 - network monitor
 - cidr to mask
 - mask to cidr
+- ipv4 to ipv6 calculator
+- ipv6 to ipv4 calculator
 
 ## requirments
 
