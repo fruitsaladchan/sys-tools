@@ -242,19 +242,35 @@ def password_generator():
             password = generate_password(length, use_uppercase, use_lowercase, use_special)
             slowprint(f"Generated Password: {password}")
             
-            print (" ")
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]")
-
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]")
             os.system("clear")
         
         except ValueError as e:
-            print(f"Error: {e}")
+            os.system("clear")
+            try:
+                slowprint(f"Error: {e}")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Continue [+]")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
+        
         except KeyboardInterrupt:
             os.system("clear")
             return
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}")
 
+        except Exception as e:
+            os.system("clear")
+            try:
+                slowprint(f"An unexpected error occurred: {e}")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Continue [+]")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
 
 def port_scanner():
     while True:
