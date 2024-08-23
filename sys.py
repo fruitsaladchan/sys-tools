@@ -531,7 +531,9 @@ def run_ipv4_to_ipv6():
             ipv4_address = input("Enter an IPv4 address: ")
             if ipv4_address == "":
                 continue
-            
+
+            ipv4 = ipaddress.IPv4Address(ipv4_address) 
+
             ipv6_address = ipaddress.IPv6Address('::ffff:' + ipv4_address)
             ipv6_compressed = str(ipv6_address)
             ipv6_expanded_short = ipv6_address.exploded
@@ -544,15 +546,19 @@ def run_ipv4_to_ipv6():
             print(" ")
             input("\033[1;33m [+] Press Enter To Continue [+]")
             os.system("clear")
+        except ipaddress.AddressValueError:
+            try:
+                print(" ")
+                slowprint("Invalid IPv4 address")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Continue [+]")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
         except KeyboardInterrupt:
             os.system("clear")
             return
-        except ipaddress.AddressValueError:
-            print(" ")
-            slowprint("Invalid IPv4 address")
-            print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]")
-            os.system("clear")
 
 def run_ipv6_to_ipv4():
     while True:
@@ -575,15 +581,17 @@ def run_ipv6_to_ipv4():
             input("\033[1;33m [+] Press Enter To Continue [+]")
             os.system("clear")
         except ipaddress.AddressValueError:
-            slowprint("Invalid IPv6 address")
-            print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]")
-            os.system("clear")
+            try:
+                slowprint("Invalid IPv6 address")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Continue [+]")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
         except KeyboardInterrupt:
             os.system("clear")
             return
-
-
 
 def about():
     try:
