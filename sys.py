@@ -506,7 +506,6 @@ def ipv6_to_ipv4(ipv6_address):
 
 def validate_ip(ip_address):
     try:
-        # Try to parse as both IPv4 and IPv6
         ipaddress.ip_address(ip_address)
         return True
     except ValueError:
@@ -621,8 +620,8 @@ def main():
                 "\033[1;33m [ 7  ]\033[1;91m Port Scanner",
                 "\033[1;33m [ 8  ]\033[1;91m WHOIS Lookup",
                 "\033[1;33m [ 9  ]\033[1;91m Network Monitor",
-                "\033[1;33m [ 10 ]\033[1;91m IPv4 to IPv6",  # New option
-                "\033[1;33m [ 11 ]\033[1;91m IPv6 to IPv4",  # New option
+                "\033[1;33m [ 10 ]\033[1;91m IPv4 to IPv6",  
+                "\033[1;33m [ 11 ]\033[1;91m IPv6 to IPv4", 
                 "\033[1;33m [ 12 ]\033[1;91m CIDR to Mask",
                 "\033[1;33m [ 13 ]\033[1;91m Mask to CIDR",
                 "\033[1;33m [ 14 ]\033[1;91m About This Tool",
