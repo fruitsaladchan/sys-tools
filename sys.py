@@ -124,11 +124,17 @@ def ip_to_subnets():
 
         except ValueError as e:
             print(f"Error: {e}")
+            print("Please enter a valid IP address and subnet number.")
+            input("\nPress Enter to try again...")
+            os.system("clear")
         except KeyboardInterrupt:
             os.system("clear")
             return
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
+            print("Please enter a valid IP address and subnet number.")
+            input("\nPress Enter to try again...")
+            os.system("clear")
 
 def ip_to_binary():
     while True:
@@ -138,13 +144,17 @@ def ip_to_binary():
             ip_cidr = input("Please enter a valid IP address with CIDR notation (e.g., 192.168.2.22/24): ")
             
             if '/' not in ip_cidr:
-                print("You forgot to include the CIDR notation. Please try again.")
+                slowprint("You forgot to include the CIDR notation. Please try again.")
+                input("\nPress Enter to try again...")
+                os.system("clear")
                 continue
 
             if is_valid_ip_cidr(ip_cidr):
                 ip, cidr = ip_cidr.split('/')
                 cidr = int(cidr)
                 mask = cidr_to_subnet_mask(cidr)
+
+                print("  ")
                 slowprint(f"Original value: {ip}/{cidr}")
                 slowprint(f"Mask: {mask}")
 
@@ -163,7 +173,9 @@ def ip_to_binary():
                 magas = input("\033[1;33m [+] Press Enter To Continue [+]")
                 os.system("clear")
             else:
-                print("Invalid IP address or CIDR notation. Please try again.")
+                slowprint("Invalid IP address or CIDR notation. Please try again.")
+                input("\nPress Enter to try again...")
+                os.system("clear")
 
         except KeyboardInterrupt:
             os.system("clear")
@@ -562,14 +574,16 @@ def run_ipv6_to_ipv4():
             print(" ")
             input("\033[1;33m [+] Press Enter To Continue [+]")
             os.system("clear")
-        except KeyboardInterrupt:
-            os.system("clear")
-            return
         except ipaddress.AddressValueError:
             slowprint("Invalid IPv6 address")
             print(" ")
             input("\033[1;33m [+] Press Enter To Continue [+]")
             os.system("clear")
+        except KeyboardInterrupt:
+            os.system("clear")
+            return
+
+
 
 def about():
     try:
