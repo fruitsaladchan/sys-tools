@@ -16,7 +16,7 @@ import string
 import psutil
 import nmap
 
-def slowprint(s, delay=1./300, newline=True):
+def slowprint(s, delay=1./400, newline=True):
     for c in s:
         sys.stdout.write(c)
         sys.stdout.flush()
@@ -28,6 +28,8 @@ def slowprint(s, delay=1./300, newline=True):
 def ipinfo():
     while True:
         try:
+            os.system("figlet scan ip")
+            print(" ")
             ip = input(" Enter IP Address : \033[1;32m ")
             if ip.strip() == "":
                 return
@@ -88,6 +90,7 @@ def dns_lookup():
                 print(" ")
                 input("\033[1;33m [+] Press Enter To Retry [+]\033[0m")
                 os.system("clear")
+                continue  
             except KeyboardInterrupt:
                 os.system("clear")
                 return
@@ -101,6 +104,7 @@ def dns_lookup():
                 print(" ")
                 input("\033[1;33m [+] Press Enter To Retry [+]\033[0m")
                 os.system("clear")
+                continue  
             except KeyboardInterrupt:
                 os.system("clear")
                 return
@@ -348,32 +352,43 @@ def port_scanner():
             return
 
 def whois_lookup():
-    try:
-        print("\033[1;36m")
-        os.system("figlet WHOIS Lookup")
-        print(" ")
+    while True:
+        try:
+            print("\033[1;36m")
+            os.system("figlet WHOIS Lookup")
+            print(" ")
 
-        domain = input("\033[1;32mEnter a domain to look up: \033[0m")
+            domain = input("\033[1;32mEnter a domain to look up: \033[0m")
 
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect(("whois.iana.org", 43))
-        s.send(f"{domain}\r\n".encode())
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.connect(("whois.iana.org", 43))
+            s.send(f"{domain}\r\n".encode())
 
-        response = s.recv(4096).decode()
-        s.close()
+            response = s.recv(4096).decode()
+            s.close()
 
-        slowprint(f"\033[1;91m{response}\033[0m")
-        input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
-        os.system("clear")
-    except KeyboardInterrupt:
-        os.system("clear")
-        return
-    except Exception as e:
-        os.system("clear")
-        slowprint(f"\033[1;31mAn error occurred: {str(e)}\033[0m")
-        print(" ")
-        input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
-        os.system("clear")
+            slowprint(f"\033[1;91m{response}\033[0m")
+            magas = input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+
+            os.system("clear")
+            if magas == "":
+                continue  
+            else:
+                break
+
+        except KeyboardInterrupt:
+            os.system("clear")
+            return
+        except Exception as e:
+            os.system("clear")
+            try:
+                slowprint(f"\033[1;31mAn error occurred: {str(e)}\033[0m")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
 
 def format_bytes(size):
     # 2**10 = 1024
@@ -459,11 +474,11 @@ def cidr_to_mask(cidr_input):
     return mask
 
 def run_cidr_to_mask():
-    print("\033[1;36m")
-    os.system("figlet cidr to Mask")
-
     try:
         while True:
+            os.system("clear")  
+            print("\033[1;36m")
+            os.system("figlet cidr to Mask")
             print(" ")
             cidr_input = input("\033[1;32mEnter a CIDR value (e.g., 24) or press Enter to exit: \033[0m")
             
@@ -474,14 +489,11 @@ def run_cidr_to_mask():
             
             if "Error" in mask:
                 slowprint(f"\033[1;31m{mask}\033[0m")
-
             else:
                 slowprint(f"\033[1;32mThe subnet mask for CIDR /{cidr_input} is: \033[1;91m{mask}\033[0m")
-
             
             print(" ")
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
-            os.system("clear")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
 
     except KeyboardInterrupt:
         os.system("clear")
@@ -504,10 +516,12 @@ def mask_to_cidr(mask):
     return cidr
 
 def run_mask_to_cidr():
-    print("\033[1;36m")
-    os.system("figlet mask to cidr")
     try:
         while True:
+            os.system("clear")  
+            print("\033[1;36m")
+            os.system("figlet mask to cidr")
+            print(" ")
             mask_input = input("\033[1;32mEnter a subnet mask (e.g., 255.255.255.0) or press Enter to exit: \033[0m")
 
             if not mask_input:
@@ -517,13 +531,11 @@ def run_mask_to_cidr():
             
             if "Error" in cidr:
                 slowprint(f"\033[1;31m{cidr}\033[0m")
-
             else:
                 slowprint(f"\033[1;32mThe CIDR notation for subnet mask {mask_input} is: \033[1;91m/{cidr}\033[0m")
             
             print(" ")
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
-            os.system("clear")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
 
     except KeyboardInterrupt:
         os.system("clear")
@@ -741,11 +753,9 @@ def ipv6_subnet_calculator():
             if ipv6_input == "":
                 continue
 
-            # Parse the IP address and subnet
             network = ipaddress.IPv6Network(ipv6_input, strict=False)
             ip = ipaddress.IPv6Address(ipv6_input.split('/')[0])
 
-            # Calculate subnet details
             netmask = network.prefixlen
             network_address = network.network_address
             broadcast_address = network.broadcast_address
@@ -755,7 +765,6 @@ def ipv6_subnet_calculator():
             ipv4_repr = ip.ipv4_mapped if ip.ipv4_mapped else "No IPv4 representation"
             ptr_rr_name = ip.reverse_pointer
 
-            # Print the subnet details with colors
             print(f"\033[1;33mAddress:    \033[1;91m {ip}/{netmask}")
             print(f"\033[1;33mNetmask:    \033[1;91m {network.netmask} = {netmask}")
             print(f"\033[1;33mNetwork:    \033[1;91m {network_address}/{netmask}")
