@@ -814,7 +814,7 @@ def about():
         slowprint ("\033[1;91m -----------------------------------------------")
         slowprint ("\033[1;33m" + "         [+] Tool Name     =>\033[1;36m" + " Sys Tools")
         slowprint ("\033[1;33m" + "         [+] Author        =>\033[1;36m" + " fruitsaladchan ")
-        slowprint ("\033[1;33m" + "         [+] Latest Update =>\033[1;36m" + " 20/8/2024")
+        slowprint ("\033[1;33m" + "         [+] Latest Update =>\033[1;36m" + " 25/8/2024")
         slowprint ("\033[1;33m" + "         [+] Github        =>\033[1;36m" + " Github.com/fruitsaladchan")
         slowprint ("\033[1;91m -----------------------------------------------")
         print(" ")
