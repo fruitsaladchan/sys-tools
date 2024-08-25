@@ -69,33 +69,52 @@ def ipinfo():
 def dns_lookup():
     while True:
         try:
+            print("\033[1;36m")
             os.system("figlet DNS Lookup")
             print(" ")
-            domain = input("Enter a domain name (e.g., example.com): ")
+            domain = input("\033[1;33mEnter a domain name (e.g., example.com):\033[0m ")
             ip_address = socket.gethostbyname(domain)
-            slowprint(f"The IP address for {domain} is: {ip_address}")
+            slowprint(f"\033[1;33mThe IP address for \033[1;91m{domain} \033[1;33mis: \033[1;91m{ip_address}\033[0m")
 
-            print (" ")
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]")
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
 
             os.system("clear")
 
         except socket.gaierror:
-            slowprint(f"Error: Unable to resolve the domain {domain}.")
+            os.system("clear")
+            try:
+                slowprint(f"\033[1;91mError: \033[1;33mUnable to resolve the domain \033[1;91m{domain}\033[0m")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Retry [+]\033[0m")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
         except KeyboardInterrupt:
             os.system("clear")
             return
         except Exception as e:
-            slowprint(f"An unexpected error occurred: {e}")
+            os.system("clear")
+            try:
+                slowprint(f"\033[1;91mAn unexpected error occurred: \033[1;33m{e}\033[0m")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Retry [+]\033[0m")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
 
 def ip_to_subnets():
     while True:
         try:
-            os.system("figlet Subnet calculator")
+            print("\033[1;36m")
+            os.system("figlet Subnet Divider")
             print(" ")
-            ip_input = input("Enter an IP address (e.g., 10.1.1.0/24): ")
+            ip_input = input("\033[1;32mEnter an IP address (e.g., 10.1.1.0/24): \033[0m")
             network = ipaddress.IPv4Network(ip_input, strict=False)
-            num_subnets = int(input("Enter the number of subnets to create: "))
+            
+            num_subnets = int(input("\033[1;32mEnter the number of subnets to create: \033[0m"))
             if num_subnets <= 0:
                 raise ValueError("Number of subnets must be a positive integer.")
 
@@ -106,76 +125,89 @@ def ip_to_subnets():
             num_possible_subnets = 2**(new_prefix - network.prefixlen)
             subnet_mask = ipaddress.IPv4Network(f"0.0.0.0/{new_prefix}").netmask
 
-            slowprint(f"\nTo create {num_subnets} subnets, the new subnet mask will be: {subnet_mask}")
-            slowprint(f"You can create up to {num_possible_subnets} subnets with this configuration.\n")
+            slowprint(f"\n\033[1;32mTo create {num_subnets} subnets, the new subnet mask will be: \033[1;91m{subnet_mask}\033[0m")
+            slowprint(f"\033[1;32mYou can create up to {num_possible_subnets} subnets with this configuration.\033[0m\n")
+
+            table_color = "\033[1;35m"
+
+            slowprint(table_color + "{:<10} {:<20} {:<20} {:<20} {:<20}".format("Subnet", "Network Address", "First Host", "Last Host", "Broadcast Address"))
+            slowprint(table_color + "-" * 90)
 
             subnets = list(network.subnets(new_prefix=new_prefix))
-            slowprint(f"{'Subnet':<10} {'Network Address':<20} {'First Host':<20} {'Last Host':<20} {'Broadcast Address':<20}")
-            slowprint("-" * 90)
             for i, subnet in enumerate(subnets, 1):
                 first_ip = subnet.network_address + 1
                 last_ip = subnet.broadcast_address - 1
-                print(f"{i:<10} {str(subnet.network_address):<20} {str(first_ip):<20} {str(last_ip):<20} {str(subnet.broadcast_address):<20}")
+                print(table_color + "{:<10} {:<20} {:<20} {:<20} {:<20}".format(i, str(subnet.network_address), str(first_ip), str(last_ip), str(subnet.broadcast_address)))
 
             print (" ")
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]")
-
+            magas = input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
             os.system("clear")
 
         except ValueError as e:
-            print(f"Error: {e}")
-            print("Please enter a valid IP address and subnet number.")
-            input("\nPress Enter to try again...")
+            slowprint(f"\033[1;31mError: {e}\033[0m")
+            slowprint("\033[1;31mPlease enter a valid IP address and subnet number.\033[0m")
+            input("\n\033[1;33mPress Enter to try again...\033[0m")
             os.system("clear")
         except KeyboardInterrupt:
             os.system("clear")
             return
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
-            print("Please enter a valid IP address and subnet number.")
-            input("\nPress Enter to try again...")
+            slowprint(f"\033[1;31mAn unexpected error occurred: {e}\033[0m")
+            slowprint("\033[1;31mPlease enter a valid IP address and subnet number.\033[0m")
+            input("\n\033[1;33mPress Enter to try again...\033[0m")
             os.system("clear")
 
 def ip_to_binary():
     while True:
         try:
+            print("\033[1;36m")
             os.system("figlet Ip to Binary")
             print(" ")
-            ip_cidr = input("Please enter a valid IP address with CIDR notation (e.g., 192.168.2.22/24): ")
+            ip_cidr = input("\033[1;33mPlease enter a IP address with CIDR notation (e.g., 192.168.2.22/24):\033[0m ")
             
             if '/' not in ip_cidr:
-                slowprint("You forgot to include the CIDR notation. Please try again.")
-                input("\nPress Enter to try again...")
                 os.system("clear")
-                continue
+                try:
+                    slowprint("\033[1;91mError: \033[1;33mYou forgot to include the CIDR notation. Please try again.\033[0m")
+                    input("\n\033[1;33m [+] Press Enter To Retry [+]\033[0m")
+                    os.system("clear")
+                    continue
+                except KeyboardInterrupt:
+                    os.system("clear")
+                    return
 
             if is_valid_ip_cidr(ip_cidr):
                 ip, cidr = ip_cidr.split('/')
                 cidr = int(cidr)
                 mask = cidr_to_subnet_mask(cidr)
 
-                print("  ")
-                slowprint(f"Original value: {ip}/{cidr}")
-                slowprint(f"Mask: {mask}")
+                print(" ")
+                slowprint(f"\033[1;33mOriginal value:\033[1;91m {ip}/{cidr}\033[0m")
+                slowprint(f"\033[1;33mMask:\033[1;91m {mask}\033[0m")
 
                 signed_ip_bin = signed_binary_ip(ip, cidr)
                 ip_bin = ip_to_binary_func(ip)
                 signed_mask_bin = signed_binary_mask(cidr)
                 mask_bin = ip_to_binary_func(mask)
 
-                slowprint(f"Signed IP Binary: {signed_ip_bin}")
-                slowprint(f"IP Binary: {ip_bin}")
+                slowprint(f"\033[1;33mSigned IP Binary:\033[1;91m {signed_ip_bin}\033[0m")
+                slowprint(f"\033[1;33mIP Binary:\033[1;91m {ip_bin}\033[0m")
 
-                slowprint(f"Signed Mask Binary: {signed_mask_bin}")
-                slowprint(f"Mask Binary: {mask_bin}")
+                slowprint(f"\033[1;33mSigned Mask Binary:\033[1;91m {signed_mask_bin}\033[0m")
+                slowprint(f"\033[1;33mMask Binary:\033[1;91m {mask_bin}\033[0m")
 
                 print(" ")
-                magas = input("\033[1;33m [+] Press Enter To Continue [+]")
+                input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
                 os.system("clear")
             else:
-                slowprint("Invalid IP address or CIDR notation. Please try again.")
-                input("\nPress Enter to try again...")
                 os.system("clear")
+                try:
+                    slowprint("\033[1;91mError: \033[1;33mInvalid IP address or CIDR notation. Please try again.\033[0m")
+                    input("\n\033[1;33m [+] Press Enter To Retry [+]\033[0m")
+                    os.system("clear")
+                except KeyboardInterrupt:
+                    os.system("clear")
+                    return
 
         except KeyboardInterrupt:
             os.system("clear")
@@ -209,7 +241,6 @@ def signed_binary_mask(cidr):
     mask = cidr_to_subnet_mask(cidr)
     return signed_binary_ip(mask, cidr)
 
-
 def generate_password(length, use_uppercase, use_lowercase, use_special):
     characters = ""
     
@@ -229,29 +260,31 @@ def generate_password(length, use_uppercase, use_lowercase, use_special):
 def password_generator():
     while True:
         try:
+            print("\033[1;36m")
             os.system("figlet Password Generator")
             print(" ")
-            length = int(input("Enter the length of the password (1-75): "))
+
+            length = int(input("\033[1;32mEnter the length of the password (1-75): \033[0m"))
             if length < 1 or length > 75:
                 raise ValueError("Length must be between 1 and 75.")
             
-            use_uppercase = input("Include uppercase letters? (y/n): ").strip().lower() == 'y'
-            use_lowercase = input("Include lowercase letters? (y/n): ").strip().lower() == 'y'
-            use_special = input("Include special characters? (y/n): ").strip().lower() == 'y'
+            use_uppercase = input("\033[1;32mInclude uppercase letters? (y/n): \033[0m").strip().lower() == 'y'
+            use_lowercase = input("\033[1;32mInclude lowercase letters? (y/n): \033[0m").strip().lower() == 'y'
+            use_special = input("\033[1;32mInclude special characters? (y/n): \033[0m").strip().lower() == 'y'
 
             password = generate_password(length, use_uppercase, use_lowercase, use_special)
-            slowprint(f"Generated Password: {password}")
+            slowprint(f"\033[1;32mGenerated Password: \033[1;91m{password}\033[0m")
             
             print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
             os.system("clear")
         
         except ValueError as e:
             os.system("clear")
             try:
-                slowprint(f"Error: {e}")
+                slowprint(f"\033[1;31mError: {e}\033[0m")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Continue [+]")
+                input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
                 os.system("clear")
             except KeyboardInterrupt:
                 os.system("clear")
@@ -264,9 +297,9 @@ def password_generator():
         except Exception as e:
             os.system("clear")
             try:
-                slowprint(f"An unexpected error occurred: {e}")
+                slowprint(f"\033[1;31mAn unexpected error occurred: {e}\033[0m")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Continue [+]")
+                input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
                 os.system("clear")
             except KeyboardInterrupt:
                 os.system("clear")
@@ -275,53 +308,72 @@ def password_generator():
 def port_scanner():
     while True:
         try:
+            print("\033[1;36m")
             os.system("figlet Port Scanner")
             print(" ")
-            target = input("Enter the target IP address or hostname: ")
-            port_range = input("Enter the port range to scan (e.g., '20-80'): ")
+
+            target = input("\033[1;32mEnter the target IP address or hostname: \033[0m")
+            port_range = input("\033[1;32mEnter the port range to scan (e.g., '20-80'): \033[0m")
 
             nm = nmap.PortScanner()
-            slowprint(f"\nScanning {target} for open ports in range {port_range}...")
+            slowprint(f"\n\033[1;34mScanning {target} for open ports in range {port_range}...\033[0m")
 
             nm.scan(target, port_range)
             
             for host in nm.all_hosts():
-                slowprint(f"\nHost: {host} ({nm[host].hostname()})")
-                slowprint(f"State: {nm[host].state()}")
+                slowprint(f"\n\033[1;32mHost: \033[1;91m{host} ({nm[host].hostname()})\033[0m")
+                slowprint(f"\033[1;32mState: \033[1;91m{nm[host].state()}\033[0m")
 
                 for protocol in nm[host].all_protocols():
-                    slowprint(f"Protocol: {protocol}")
+                    slowprint(f"\033[1;32mProtocol: \033[1;91m{protocol}\033[0m")
 
                     ports = nm[host][protocol].keys()
                     for port in sorted(ports):
                         port_state = nm[host][protocol][port]['state']
-                        slowprint(f"Port: {port}\tState: {port_state}")
+                        slowprint(f"\033[1;32mPort: \033[1;91m{port}\t\033[1;32mState: \033[1;91m{port_state}\033[0m")
 
             print(" ")
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
             os.system("clear")
 
         except Exception as e:
-            slowprint(f"Error occurred: {str(e)}")
+            os.system("clear")
+            slowprint(f"\033[1;31mError occurred: {str(e)}\033[0m")
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            os.system("clear")
+        
         except KeyboardInterrupt:
             os.system("clear")
             return
 
 def whois_lookup():
     try:
-        domain = input("Enter a domain to look up: ")
+        print("\033[1;36m")
+        os.system("figlet WHOIS Lookup")
+        print(" ")
+
+        domain = input("\033[1;32mEnter a domain to look up: \033[0m")
+
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect(("whois.iana.org", 43))
         s.send(f"{domain}\r\n".encode())
+
         response = s.recv(4096).decode()
         s.close()
-        slowprint(response)
-        input("\033[1;33m [+] Press Enter To Continue [+]") 
-    except Exception as e:
-        slowprint(f"An error occurred: {str(e)}")
-        print(" ")
-        magas = input("\033[1;33m [+] Press Enter To Continue [+]")
 
+        slowprint(f"\033[1;91m{response}\033[0m")
+        input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+        os.system("clear")
+    except KeyboardInterrupt:
+        os.system("clear")
+        return
+    except Exception as e:
+        os.system("clear")
+        slowprint(f"\033[1;31mAn error occurred: {str(e)}\033[0m")
+        print(" ")
+        input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+        os.system("clear")
 
 def format_bytes(size):
     # 2**10 = 1024
@@ -353,33 +405,33 @@ def network_monitor():
                 
                 old_value = new_value
 
-                print("\033[2J\033[H", end="") 
+                print("\033[2J\033[H", end="")
                 print("\033[1;33m [+] Press Ctrl+C to stop monitoring")
                 print("\033[1;32m")
-                print(f"\033[1;34mNetwork Monitoring:")
-                print(f"\033[1;32mTotal Bytes Sent: {format_bytes(total_sent)}")
-                print(f"Total Bytes Received: {format_bytes(total_recv)}")
-                print(f"Packets Sent: {new_value.packets_sent - initial_value.packets_sent}")
-                print(f"Packets Received: {new_value.packets_recv - initial_value.packets_recv}")
-                print(f"Errors In: {new_value.errin - initial_value.errin}")
-                print(f"Errors Out: {new_value.errout - initial_value.errout}")
-                print(f"Dropped Packets In: {new_value.dropin - initial_value.dropin}")
-                print(f"Dropped Packets Out: {new_value.dropout - initial_value.dropout}")
+                print(f"\033[1;34mNetwork Monitoring:\033[0m")
+                print(f"\033[1;32mTotal Bytes Sent: \033[1;91m{format_bytes(total_sent)}\033[0m")
+                print(f"\033[1;32mTotal Bytes Received: \033[1;91m{format_bytes(total_recv)}\033[0m")
+                print(f"\033[1;32mPackets Sent: \033[1;91m{new_value.packets_sent - initial_value.packets_sent}\033[0m")
+                print(f"\033[1;32mPackets Received: \033[1;91m{new_value.packets_recv - initial_value.packets_recv}\033[0m")
+                print(f"\033[1;32mErrors In: \033[1;91m{new_value.errin - initial_value.errin}\033[0m")
+                print(f"\033[1;32mErrors Out: \033[1;91m{new_value.errout - initial_value.errout}\033[0m")
+                print(f"\033[1;32mDropped Packets In: \033[1;91m{new_value.dropin - initial_value.dropin}\033[0m")
+                print(f"\033[1;32mDropped Packets Out: \033[1;91m{new_value.dropout - initial_value.dropout}\033[0m")
                 
                 time.sleep(1)
 
         except KeyboardInterrupt:
-            slowprint("\n\033[1;31m Monitoring stopped.")
+            slowprint("\n\033[1;31m Monitoring stopped.\033[0m")
             print("")
             try:
-                magas = input("\033[1;33m [+] Press Enter to restart or Ctrl+C to return [+] ")
+                magas = input("\033[1;33m [+] Press Enter to restart or Ctrl+C to return [+] \033[0m")
                 if magas == "":
                     continue  
             except KeyboardInterrupt:
                 break  
 
     os.system("clear")
-    return 
+    return
 
 def cidr_to_mask(cidr_input):
     try:
@@ -407,12 +459,13 @@ def cidr_to_mask(cidr_input):
     return mask
 
 def run_cidr_to_mask():
+    print("\033[1;36m")
     os.system("figlet cidr to Mask")
 
     try:
         while True:
             print(" ")
-            cidr_input = input("Enter a CIDR value (e.g., 24) or press Enter to exit: ")
+            cidr_input = input("\033[1;32mEnter a CIDR value (e.g., 24) or press Enter to exit: \033[0m")
             
             if not cidr_input:
                 break
@@ -420,14 +473,15 @@ def run_cidr_to_mask():
             mask = cidr_to_mask(cidr_input)
             
             if "Error" in mask:
-                print(mask)
+                slowprint(f"\033[1;31m{mask}\033[0m")
+
             else:
-                slowprint(f"The subnet mask for CIDR /{cidr_input} is: {mask}")
+                slowprint(f"\033[1;32mThe subnet mask for CIDR /{cidr_input} is: \033[1;91m{mask}\033[0m")
+
             
             print(" ")
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]")
-
-        os.system("clear")
+            magas = input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            os.system("clear")
 
     except KeyboardInterrupt:
         os.system("clear")
@@ -450,23 +504,25 @@ def mask_to_cidr(mask):
     return cidr
 
 def run_mask_to_cidr():
+    print("\033[1;36m")
     os.system("figlet mask to cidr")
     try:
         while True:
-            mask_input = input("Enter a subnet mask (e.g., 255.255.255.0) or press Enter to exit: ")
-            
+            mask_input = input("\033[1;32mEnter a subnet mask (e.g., 255.255.255.0) or press Enter to exit: \033[0m")
+
             if not mask_input:
                 break
             
             cidr = mask_to_cidr(mask_input)
             
             if "Error" in cidr:
-                print(cidr)
+                slowprint(f"\033[1;31m{cidr}\033[0m")
+
             else:
-                slowprint(f"The CIDR notation for subnet mask {mask_input} is: /{cidr}")
+                slowprint(f"\033[1;32mThe CIDR notation for subnet mask {mask_input} is: \033[1;91m/{cidr}\033[0m")
             
             print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]")
+            magas = input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
             os.system("clear")
 
     except KeyboardInterrupt:
@@ -488,6 +544,7 @@ def is_valid_binary(binary):
     return True
 
 def run_binary_to_ip():
+    print("\033[1;36m")
     os.system("figlet Binary to IP")
 
     try:
@@ -542,6 +599,7 @@ def validate_ip(ip_address):
 def run_ipv4_to_ipv6():
     while True:
         try:
+            print("\033[1;36m")
             os.system("figlet ipv4 to ipv6")
             print(" ")
             ipv4_address = input("Enter an IPv4 address: ")
@@ -579,6 +637,7 @@ def run_ipv4_to_ipv6():
 def run_ipv6_to_ipv4():
     while True:
         try:
+            print("\033[1;36m")
             os.system("figlet ipv6 to ipv4")
             print(" ")
             ipv6_address = input("Enter an IPv6 address: ")
@@ -608,6 +667,134 @@ def run_ipv6_to_ipv4():
         except KeyboardInterrupt:
             os.system("clear")
             return
+
+def ipv4_subnet_calculator():
+    while True:
+        try:
+            print("\033[1;36m")
+            os.system("figlet IPv4 Subnet Calculator")
+            print(" ")
+            ipv4_input = input("Enter an IPv4 address with CIDR (e.g., 192.0.3.171/27): ")
+            print(" ")
+            if ipv4_input == "":
+                continue
+
+            network = ipaddress.IPv4Network(ipv4_input, strict=False)
+            ip = ipaddress.IPv4Address(ipv4_input.split('/')[0])
+
+            netmask = network.netmask
+            network_address = network.network_address
+            broadcast_address = network.broadcast_address
+            host_min = network_address + 1
+            host_max = broadcast_address - 1
+            num_hosts = network.num_addresses
+            ipv6_repr = ipaddress.IPv6Address('2002::' + str(ip))
+            ptr_rr_name = ip.reverse_pointer
+
+            slowprint(f"\033[1;33mAddress:    \033[1;91m {ip}/{network.prefixlen}")
+            slowprint(f"\033[1;33mNetmask:    \033[1;91m {netmask} = {network.prefixlen}")
+            slowprint(f"\033[1;33mNetwork:    \033[1;91m {network_address}/{network.prefixlen}")
+            slowprint(f"\033[1;33mHostMin:    \033[1;91m {host_min}")
+            slowprint(f"\033[1;33mHostMax:    \033[1;91m {host_max}")
+            slowprint(f"\033[1;33mBroadcast:  \033[1;91m {broadcast_address}")
+            slowprint(f"\033[1;33mHosts/Net:  \033[1;91m {num_hosts}")
+            slowprint(f"\033[1;33mIPv6 repr:  \033[1;91m {ipv6_repr}")
+            slowprint(f"\033[1;33mPTR RR name:\033[1;91m {ptr_rr_name}")
+            slowprint(f"\033[1;33mIP version: \033[1;91m {ip.version}")
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            os.system("clear")
+        
+        except ValueError as e:
+            os.system("clear")
+            try:
+                slowprint(f"Error: {e}")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Retry [+]")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
+
+        except KeyboardInterrupt:
+            os.system("clear")
+            return
+
+        except Exception as e:
+            os.system("clear")
+            try:
+                slowprint(f"An unexpected error occurred: {e}")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Retry [+]")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
+
+def ipv6_subnet_calculator():
+    while True:
+        try:
+            print("\033[1;36m")
+            os.system("figlet IPv6 Subnet Calculator")
+            print(" ")
+            ipv6_input = input("\033[1;33mEnter an IPv6 address with CIDR (e.g., 2001:db8::/32):\033[0m ")
+            if ipv6_input == "":
+                continue
+
+            # Parse the IP address and subnet
+            network = ipaddress.IPv6Network(ipv6_input, strict=False)
+            ip = ipaddress.IPv6Address(ipv6_input.split('/')[0])
+
+            # Calculate subnet details
+            netmask = network.prefixlen
+            network_address = network.network_address
+            broadcast_address = network.broadcast_address
+            host_min = network_address + 1
+            host_max = broadcast_address - 1
+            num_hosts = network.num_addresses
+            ipv4_repr = ip.ipv4_mapped if ip.ipv4_mapped else "No IPv4 representation"
+            ptr_rr_name = ip.reverse_pointer
+
+            # Print the subnet details with colors
+            print(f"\033[1;33mAddress:    \033[1;91m {ip}/{netmask}")
+            print(f"\033[1;33mNetmask:    \033[1;91m {network.netmask} = {netmask}")
+            print(f"\033[1;33mNetwork:    \033[1;91m {network_address}/{netmask}")
+            print(f"\033[1;33mHostMin:    \033[1;91m {host_min}")
+            print(f"\033[1;33mHostMax:    \033[1;91m {host_max}")
+            print(f"\033[1;33mBroadcast:  \033[1;91m {broadcast_address}")
+            print(f"\033[1;33mHosts/Net:  \033[1;91m {num_hosts}")
+            print(f"\033[1;33mIPv4 repr:  \033[1;91m {ipv4_repr}")
+            print(f"\033[1;33mPTR RR name:\033[1;91m {ptr_rr_name}")
+            print(f"\033[1;33mIP version: \033[1;91m {ip.version}")
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            os.system("clear")
+        
+        except ValueError as e:
+            os.system("clear")
+            try:
+                slowprint(f"Error: {e}")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Retry [+]")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
+
+        except KeyboardInterrupt:
+            os.system("clear")
+            return
+
+        except Exception as e:
+            os.system("clear")
+            try:
+                slowprint(f"An unexpected error occurred: {e}")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Retry [+]")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
 
 def about():
     try:
@@ -648,21 +835,24 @@ def main():
             column1 = [
                 "\033[1;33m [ 1  ]\033[1;91m Scan IP Address",
                 "\033[1;33m [ 2  ]\033[1;91m DNS Lookup",
-                "\033[1;33m [ 3  ]\033[1;91m ipv4 Subnet calculator",
+                "\033[1;33m [ 3  ]\033[1;91m ipv4 Subnet divider",
                 "\033[1;33m [ 4  ]\033[1;91m IP to Binary",
                 "\033[1;33m [ 5  ]\033[1;91m Binary to IP",
                 "\033[1;33m [ 6  ]\033[1;91m Generate Password",
+                "\033[1;33m [ 7  ]\033[1;91m Port Scanner",
+                "\033[1;33m [ 8  ]\033[1;91m WHOIS Lookup",
             ]
 
             column2 = [
-                "\033[1;33m [ 7  ]\033[1;91m Port Scanner",
-                "\033[1;33m [ 8  ]\033[1;91m WHOIS Lookup",
                 "\033[1;33m [ 9  ]\033[1;91m Network Monitor",
                 "\033[1;33m [ 10 ]\033[1;91m IPv4 to IPv6",  
                 "\033[1;33m [ 11 ]\033[1;91m IPv6 to IPv4", 
                 "\033[1;33m [ 12 ]\033[1;91m CIDR to Mask",
                 "\033[1;33m [ 13 ]\033[1;91m Mask to CIDR",
-                "\033[1;33m [ 14 ]\033[1;91m About This Tool",
+                "\033[1;33m [ 14 ]\033[1;91m ipv4 subnet Calculator",
+                "\033[1;33m [ 15 ]\033[1;91m ipv6 subnet Calculator",
+                "\033[1;33m [ 16 ]\033[1;91m About This Tool",
+
             ]
 
             for i in range(len(column1)):
@@ -726,6 +916,14 @@ def main():
                 run_mask_to_cidr()
 
             elif option == "14":
+                os.system("clear")
+                ipv4_subnet_calculator()
+
+            elif option == "15":
+                os.system("clear")
+                ipv6_subnet_calculator()
+
+            elif option == "16":
                 os.system("clear")
                 about()
 
