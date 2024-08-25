@@ -932,7 +932,7 @@ def main():
                 ext()
 
             else:
-                os.system("clear")
+                print(" ")
                 slowprint("\033[1;91m Enter Correct Number!!!")
                 time.sleep(1)
                 os.system("clear")
