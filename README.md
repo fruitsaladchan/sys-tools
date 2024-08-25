@@ -16,7 +16,7 @@ bad at python, messy code :(
 - mask to cidr
 - ipv4 to ipv6 calculator
 - ipv6 to ipv4 calculator
-- 1pv4 subnet calculator
+- ipv4 subnet calculator
 - ipv6 calculator
 
 ## requirments
