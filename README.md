@@ -7,7 +7,7 @@ bad at python, messy code :(
 - password generator
 - ip to binary converter
 - binary to ip converter
-- subnet calculator
+- subnet divider
 - dns lookup
 - port scanner
 - who is lookup
@@ -16,6 +16,8 @@ bad at python, messy code :(
 - mask to cidr
 - ipv4 to ipv6 calculator
 - ipv6 to ipv4 calculator
+- 1pv4 subnet calculator
+- ipv6 calculator
 
 ## requirments
 
