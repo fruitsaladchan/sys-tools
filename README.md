@@ -26,4 +26,4 @@ bad at python, messy code :(
 
 - pip install psutil python-nmap pyreadline3
 
-https://github.com/fruitsaladchan/sys-tools/blob/main/asset/155207.png?raw=true
+![image](https://github.com/user-attachments/assets/70aa1f88-bba3-449b-81d3-3a85d51daffc)
