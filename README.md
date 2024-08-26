@@ -25,3 +25,5 @@ bad at python, messy code :(
 - sudo pacman -S figlet nmap           (For Arch Linux)
 
 - pip install psutil python-nmap pyreadline3
+
+https://github.com/fruitsaladchan/sys-tools/blob/main/asset/155207.png
