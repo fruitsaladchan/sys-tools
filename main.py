@@ -38,13 +38,8 @@ def ipinfo():
             response = urllib.request.urlopen(url + ip)
             data = response.read()
             values = json.loads(data)
-            os.system("clear")
 
-            print ("\033[1;32m\007\n")
-            os.system("figlet Sys Tools")
-            slowprint("\033[1;36m =====================================")
-            slowprint("\033[1;33m |          IP Information           |")
-            slowprint("\033[1;36m =====================================")
+            # print ("\033[1;32m\007\n")
             slowprint("\033[1;36m" + "\n IP          : \033[1;32m " + values['query'])
             slowprint("\033[1;36m" + " Status      : \033[1;32m " + values['status'])
             slowprint("\033[1;36m" + " Region      : \033[1;32m " + values['regionName'])
@@ -56,8 +51,6 @@ def ipinfo():
             slowprint("\033[1;36m" + " ZIPCODE     : \033[1;32m " + values['zip'])
             slowprint("\033[1;36m" + " TimeZone    : \033[1;32m " + values['timezone'])
             slowprint("\033[1;36m" + " AS          : \033[1;32m " + values['as'] + "\n")
-            print (" ")
-            slowprint("\033[1;36m =====================================")
             print (" ")
             
             magas = input("\033[1;33m [+] Press Enter To Continue [+]")
@@ -268,9 +261,9 @@ def password_generator():
             os.system("figlet Password Generator")
             print(" ")
 
-            length = int(input("\033[1;32mEnter the length of the password (1-75): \033[0m"))
-            if length < 1 or length > 75:
-                raise ValueError("Length must be between 1 and 75.")
+            length = int(input("\033[1;32mEnter the length of the password (1-100): \033[0m"))
+            if length < 1 or length > 100:
+                raise ValueError("Length must be between 1 and 100.")
             
             use_uppercase = input("\033[1;32mInclude uppercase letters? (y/n): \033[0m").strip().lower() == 'y'
             use_lowercase = input("\033[1;32mInclude lowercase letters? (y/n): \033[0m").strip().lower() == 'y'
@@ -700,23 +693,46 @@ def ipv4_subnet_calculator():
             host_min = network_address + 1
             host_max = broadcast_address - 1
             num_hosts = network.num_addresses
-            ipv6_repr = ipaddress.IPv6Address('2002::' + str(ip))
-            ptr_rr_name = ip.reverse_pointer
+            usable_hosts = max(num_hosts - 2, 0)  # Number of usable hosts
+            wildcard_mask = ipaddress.IPv4Address(int(ipaddress.IPv4Address('255.255.255.255')) - int(netmask))
 
-            slowprint(f"\033[1;33mAddress:    \033[1;91m {ip}/{network.prefixlen}")
-            slowprint(f"\033[1;33mNetmask:    \033[1;91m {netmask} = {network.prefixlen}")
-            slowprint(f"\033[1;33mNetwork:    \033[1;91m {network_address}/{network.prefixlen}")
-            slowprint(f"\033[1;33mHostMin:    \033[1;91m {host_min}")
-            slowprint(f"\033[1;33mHostMax:    \033[1;91m {host_max}")
-            slowprint(f"\033[1;33mBroadcast:  \033[1;91m {broadcast_address}")
-            slowprint(f"\033[1;33mHosts/Net:  \033[1;91m {num_hosts}")
-            slowprint(f"\033[1;33mIPv6 repr:  \033[1;91m {ipv6_repr}")
-            slowprint(f"\033[1;33mPTR RR name:\033[1;91m {ptr_rr_name}")
-            slowprint(f"\033[1;33mIP version: \033[1;91m {ip.version}")
+            # Determine IP class
+            first_octet = int(str(ip).split('.')[0])
+            if first_octet >= 1 and first_octet <= 126:
+                ip_class = "A"
+            elif first_octet >= 128 and first_octet <= 191:
+                ip_class = "B"
+            elif first_octet >= 192 and first_octet <= 223:
+                ip_class = "C"
+            elif first_octet >= 224 and first_octet <= 239:
+                ip_class = "D (Multicast)"
+            else:
+                ip_class = "E (Reserved)"
+
+            # Check if IP is private
+            if ip.is_private:
+                ip_type = "Private"
+            else:
+                ip_type = "Public"
+
+            slowprint(f"\033[1;33mAddress:        \033[1;91m {ip}/{network.prefixlen}")
+            slowprint(f"\033[1;33mNetmask:        \033[1;91m {netmask} = {network.prefixlen}")
+            slowprint(f"\033[1;33mWildcard Mask:  \033[1;91m {wildcard_mask}")
+            slowprint(f"\033[1;33mNetwork:        \033[1;91m {network_address}/{network.prefixlen}")
+            slowprint(f"\033[1;33mHostMin:        \033[1;91m {host_min}")
+            slowprint(f"\033[1;33mHostMax:        \033[1;91m {host_max}")
+            slowprint(f"\033[1;33mBroadcast:      \033[1;91m {broadcast_address}")
+            slowprint(f"\033[1;33mHosts/Net:      \033[1;91m {num_hosts}")
+            slowprint(f"\033[1;33mUsable Hosts:   \033[1;91m {usable_hosts}")
+            slowprint(f"\033[1;33mIP Type:        \033[1;91m {ip_type}")
+            slowprint(f"\033[1;33mIP Class:       \033[1;91m {ip_class}")
+            slowprint(f"\033[1;33mPTR RR name:    \033[1;91m {ip.reverse_pointer}")
+            slowprint(f"\033[1;33mIPv6 repr:      \033[1;91m {ipaddress.IPv6Address('2002::' + str(ip))}")
+            slowprint(f"\033[1;33mIP version:     \033[1;91m {ip.version}")
             print(" ")
             input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
             os.system("clear")
-        
+
         except ValueError as e:
             os.system("clear")
             try:
