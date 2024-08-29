@@ -28,9 +28,10 @@ def slowprint(s, delay=1./400, newline=True):
 def ipinfo():
     while True:
         try:
-            os.system("figlet Ip Scanner ")
+            os.system("clear")
+            os.system("figlet IP Scanner")
             print(" ")
-            ip = input(" Enter IP Address : \033[1;32m ")
+            ip = input("\033[1;33mEnter IP Address: \033[1;91m")
             if ip.strip() == "":
                 return
 
@@ -38,39 +39,38 @@ def ipinfo():
                 ip_addr = ipaddress.ip_address(ip)
                 if ip_addr.is_private:
                     print(" ")
-                    print("\033[1;31m Error: Please enter a public IP address.")
+                    print("\033[1;31mError: Please enter a public IP address.\033[0m")
                     print(" ")
-                    input("\033[1;33m [+] Press Enter To Continue [+]")
+                    input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
                     os.system("clear")
                     continue
             except ValueError:
                 print(" ")
-                print("\033[1;31m Error: Invalid IP address.")
+                print("\033[1;31mError: Invalid IP address.\033[0m")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Continue [+]")
+                input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
                 os.system("clear")
                 continue
 
-            url = ("http://ip-api.com/json/")
+            url = "http://ip-api.com/json/"
             response = urllib.request.urlopen(url + ip)
             data = response.read()
             values = json.loads(data)
 
-            slowprint("\033[1;36m" + "\n IP          : \033[1;32m " + values['query'])
-            slowprint("\033[1;36m" + " Status      : \033[1;32m " + values['status'])
-            slowprint("\033[1;36m" + " Region      : \033[1;32m " + values['regionName'])
-            slowprint("\033[1;36m" + " Country     : \033[1;32m " + values['country'])
-            slowprint("\033[1;36m" + " Date & Time : \033[1;32m " + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-            slowprint("\033[1;36m" + " City        : \033[1;32m " + values['city'])
-            slowprint("\033[1;36m" + " ISP         : \033[1;32m " + values['isp'])
-            slowprint("\033[1;36m" + " Lat,Lon     : \033[1;32m " + str(values['lat']) + "," + str(values['lon']))
-            slowprint("\033[1;36m" + " ZIPCODE     : \033[1;32m " + values['zip'])
-            slowprint("\033[1;36m" + " TimeZone    : \033[1;32m " + values['timezone'])
-            slowprint("\033[1;36m" + " AS          : \033[1;32m " + values['as'] + "\n")
-            print (" ")
-            
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]")
+            slowprint("\033[1;36m" + "IP          : \033[1;32m" + values['query'])
+            slowprint("\033[1;36m" + "Status      : \033[1;32m" + values['status'])
+            slowprint("\033[1;36m" + "Region      : \033[1;32m" + values['regionName'])
+            slowprint("\033[1;36m" + "Country     : \033[1;32m" + values['country'])
+            slowprint("\033[1;36m" + "Date & Time : \033[1;32m" + datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            slowprint("\033[1;36m" + "City        : \033[1;32m" + values['city'])
+            slowprint("\033[1;36m" + "ISP         : \033[1;32m" + values['isp'])
+            slowprint("\033[1;36m" + "Lat, Lon    : \033[1;32m" + str(values['lat']) + ", " + str(values['lon']))
+            slowprint("\033[1;36m" + "ZIPCODE     : \033[1;32m" + values['zip'])
+            slowprint("\033[1;36m" + "TimeZone    : \033[1;32m" + values['timezone'])
+            slowprint("\033[1;36m" + "AS          : \033[1;32m" + values['as'] + "\n")
 
+            print(" ")
+            input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
             os.system("clear")
 
         except KeyboardInterrupt:
@@ -121,13 +121,14 @@ def dns_lookup():
 def ip_to_subnets():
     while True:
         try:
+            os.system("clear")
             print("\033[1;36m")
             os.system("figlet Subnet Divider")
             print(" ")
-            ip_input = input("\033[1;32mEnter an IP address (e.g., 10.1.1.0/24): \033[0m")
+            ip_input = input("\033[1;33mEnter an IP address (e.g., 10.1.1.0/24): \033[1;91m")
             network = ipaddress.IPv4Network(ip_input, strict=False)
             
-            num_subnets = int(input("\033[1;32mEnter the number of subnets to create: \033[0m"))
+            num_subnets = int(input("\033[1;33mEnter the number of subnets to create: \033[1;91m"))
             if num_subnets <= 0:
                 raise ValueError("Number of subnets must be a positive integer.")
 
@@ -138,8 +139,8 @@ def ip_to_subnets():
             num_possible_subnets = 2**(new_prefix - network.prefixlen)
             subnet_mask = ipaddress.IPv4Network(f"0.0.0.0/{new_prefix}").netmask
 
-            slowprint(f"\n\033[1;32mTo create {num_subnets} subnets, the new subnet mask will be: \033[1;91m{subnet_mask}\033[0m")
-            slowprint(f"\033[1;32mYou can create up to {num_possible_subnets} subnets with this configuration.\033[0m\n")
+            slowprint(f"\n\033[1;33mTo create {num_subnets} subnets, the new subnet mask will be: \033[1;91m{subnet_mask}\033[0m")
+            slowprint(f"\033[1;33mYou can create up to {num_possible_subnets} subnets with this configuration.\033[0m\n")
 
             table_color = "\033[1;35m"
 
@@ -152,8 +153,8 @@ def ip_to_subnets():
                 last_ip = subnet.broadcast_address - 1
                 print(table_color + "{:<10} {:<20} {:<20} {:<20} {:<20}".format(i, str(subnet.network_address), str(first_ip), str(last_ip), str(subnet.broadcast_address)))
 
-            print (" ")
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            print(" ")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[1;91m")
             os.system("clear")
 
         except ValueError as e:
@@ -273,23 +274,23 @@ def generate_password(length, use_uppercase, use_lowercase, use_special):
 def password_generator():
     while True:
         try:
-            print("\033[1;36m")
+            os.system("clear")
             os.system("figlet Password Generator")
             print(" ")
 
-            length = int(input("\033[1;32mEnter the length of the password (1-100): \033[0m"))
+            length = int(input("\033[1;33mEnter the length of the password (1-100): \033[0m"))
             if length < 1 or length > 100:
                 raise ValueError("Length must be between 1 and 100.")
             
-            use_uppercase = input("\033[1;32mInclude uppercase letters? (y/n): \033[0m").strip().lower() == 'y'
-            use_lowercase = input("\033[1;32mInclude lowercase letters? (y/n): \033[0m").strip().lower() == 'y'
-            use_special = input("\033[1;32mInclude special characters? (y/n): \033[0m").strip().lower() == 'y'
+            use_uppercase = input("\033[1;33mInclude uppercase letters? (y/n): \033[0m").strip().lower() == 'y'
+            use_lowercase = input("\033[1;33mInclude lowercase letters? (y/n): \033[0m").strip().lower() == 'y'
+            use_special = input("\033[1;33mInclude special characters? (y/n): \033[0m").strip().lower() == 'y'
 
             password = generate_password(length, use_uppercase, use_lowercase, use_special)
             slowprint(f"\033[1;32mGenerated Password: \033[1;91m{password}\033[0m")
             
             print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
             os.system("clear")
         
         except ValueError as e:
@@ -297,7 +298,7 @@ def password_generator():
             try:
                 slowprint(f"\033[1;31mError: {e}\033[0m")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+                input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
                 os.system("clear")
             except KeyboardInterrupt:
                 os.system("clear")
@@ -312,7 +313,7 @@ def password_generator():
             try:
                 slowprint(f"\033[1;31mAn unexpected error occurred: {e}\033[0m")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+                input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
                 os.system("clear")
             except KeyboardInterrupt:
                 os.system("clear")
@@ -325,8 +326,8 @@ def port_scanner():
             os.system("figlet Port Scanner")
             print(" ")
 
-            target = input("\033[1;32mEnter the target IP address or hostname: \033[0m")
-            port_range = input("\033[1;32mEnter the port range to scan (e.g., '20-80'): \033[0m")
+            target = input("\033[1;33mEnter the target IP address or hostname: \033[1;91m")
+            port_range = input("\033[1;33mEnter the port range to scan (e.g., '20-80'): \033[1;91m")
 
             nm = nmap.PortScanner()
             slowprint(f"\n\033[1;34mScanning {target} for open ports in range {port_range}...\033[0m")
@@ -334,26 +335,26 @@ def port_scanner():
             nm.scan(target, port_range)
             
             for host in nm.all_hosts():
-                slowprint(f"\n\033[1;32mHost: \033[1;91m{host} ({nm[host].hostname()})\033[0m")
-                slowprint(f"\033[1;32mState: \033[1;91m{nm[host].state()}\033[0m")
+                slowprint(f"\n\033[1;33mHost: \033[1;91m{host} ({nm[host].hostname()})\033[0m")
+                slowprint(f"\033[1;33mState: \033[1;91m{nm[host].state()}\033[0m")
 
                 for protocol in nm[host].all_protocols():
-                    slowprint(f"\033[1;32mProtocol: \033[1;91m{protocol}\033[0m")
+                    slowprint(f"\033[1;33mProtocol: \033[1;91m{protocol}\033[0m")
 
                     ports = nm[host][protocol].keys()
                     for port in sorted(ports):
                         port_state = nm[host][protocol][port]['state']
-                        slowprint(f"\033[1;32mPort: \033[1;91m{port}\t\033[1;32mState: \033[1;91m{port_state}\033[0m")
+                        slowprint(f"\033[1;33mPort: \033[1;91m{port}\t\033[1;33mState: \033[1;91m{port_state}\033[0m")
 
             print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
             os.system("clear")
 
         except Exception as e:
             os.system("clear")
             slowprint(f"\033[1;31mError occurred: {str(e)}\033[0m")
             print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
             os.system("clear")
         
         except KeyboardInterrupt:
@@ -367,7 +368,7 @@ def whois_lookup():
             os.system("figlet WHOIS Lookup")
             print(" ")
 
-            domain = input("\033[1;32mEnter a domain to look up: \033[0m")
+            domain = input("\033[1;33mEnter a domain to look up: \033[1;91m")
 
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect(("whois.iana.org", 43))
@@ -376,8 +377,8 @@ def whois_lookup():
             response = s.recv(4096).decode()
             s.close()
 
-            slowprint(f"\033[1;91m{response}\033[0m")
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            slowprint(f"\n\033[1;33mWHOIS Response:\n\033[1;91m{response}\033[0m")
+            magas = input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
 
             os.system("clear")
             if magas == "":
@@ -393,7 +394,7 @@ def whois_lookup():
             try:
                 slowprint(f"\033[1;31mAn error occurred: {str(e)}\033[0m")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+                input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
                 os.system("clear")
             except KeyboardInterrupt:
                 os.system("clear")
@@ -489,7 +490,7 @@ def run_cidr_to_mask():
             print("\033[1;36m")
             os.system("figlet cidr to Mask")
             print(" ")
-            cidr_input = input("\033[1;32mEnter a CIDR value (e.g., 24) or press Enter to exit: \033[0m")
+            cidr_input = input("\033[1;33mEnter a CIDR value (e.g., 24) or press Enter to exit: \033[1;91m")
             
             if not cidr_input:
                 break
@@ -499,10 +500,10 @@ def run_cidr_to_mask():
             if "Error" in mask:
                 slowprint(f"\033[1;31m{mask}\033[0m")
             else:
-                slowprint(f"\033[1;32mThe subnet mask for CIDR /{cidr_input} is: \033[1;91m{mask}\033[0m")
+                slowprint(f"\033[1;33mThe subnet mask for CIDR /{cidr_input} is: \033[1;91m{mask}\033[0m")
             
             print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[1;91m")
 
     except KeyboardInterrupt:
         os.system("clear")
@@ -531,7 +532,7 @@ def run_mask_to_cidr():
             print("\033[1;36m")
             os.system("figlet mask to cidr")
             print(" ")
-            mask_input = input("\033[1;32mEnter a subnet mask (e.g., 255.255.255.0) or press Enter to exit: \033[0m")
+            mask_input = input("\033[1;33mEnter a subnet mask (e.g., 255.255.255.0) or press Enter to exit: \033[1;91m")
 
             if not mask_input:
                 break
@@ -541,10 +542,10 @@ def run_mask_to_cidr():
             if "Error" in cidr:
                 slowprint(f"\033[1;31m{cidr}\033[0m")
             else:
-                slowprint(f"\033[1;32mThe CIDR notation for subnet mask {mask_input} is: \033[1;91m/{cidr}\033[0m")
+                slowprint(f"\033[1;33mThe CIDR notation for subnet mask {mask_input} is: \033[1;91m/{cidr}\033[0m")
             
             print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[1;91m")
 
     except KeyboardInterrupt:
         os.system("clear")
@@ -565,32 +566,30 @@ def is_valid_binary(binary):
     return True
 
 def run_binary_to_ip():
-    print("\033[1;36m")
-    os.system("figlet Binary to IP")
-
     try:
         while True:
+            os.system("clear")
+            print("\033[1;36m")
+            os.system("figlet Binary to IP")
+
             print(" ")
-            binary_input = input("Enter a binary IP (e.g., 11000000.10101000.00000001.00000001) or press Enter to exit: ")
-            
+            binary_input = input("\033[1;33mEnter a binary IP (e.g., 11000000.10101000.00000001.00000001) or press Enter to exit: \033[1;91m")
+
             if not binary_input:
                 break
-            
+
             if is_valid_binary(binary_input):
                 ip = binary_to_ip(binary_input)
-                slowprint(f"The IP address for binary {binary_input} is: {ip}")
+                slowprint(f"\033[1;33mThe IP address for binary {binary_input} is:\033[1;91m {ip}")
             else:
-                slowprint("Error: Invalid binary IP format. Please enter in the format 8.8.8.8, with each octet as an 8-bit binary number.")
+                slowprint("\033[1;33mError:\033[1;91m Invalid binary IP format. Please enter in the format 8.8.8.8, with each octet as an 8-bit binary number.")
 
             print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]")
-
-        os.system("clear")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[1;91m")
 
     except KeyboardInterrupt:
         os.system("clear")
         return
-
 
 def ipv4_to_ipv6(ipv4_address):
     try:
@@ -623,7 +622,7 @@ def run_ipv4_to_ipv6():
             print("\033[1;36m")
             os.system("figlet ipv4 to ipv6")
             print(" ")
-            ipv4_address = input("Enter an IPv4 address: ")
+            ipv4_address = input("\033[1;33mEnter an IPv4 address: \033[1;91m")
             if ipv4_address == "":
                 continue
 
@@ -635,9 +634,9 @@ def run_ipv4_to_ipv6():
             ipv6_expanded_full = ipv6_expanded_short.replace('0000', '0')
 
             print(" ")
-            slowprint(f"IPV6 Compressed: {ipv6_compressed}")
-            slowprint(f"IPV6 Expanded (Shortened): {ipv6_expanded_full}")
-            slowprint(f"IPV6 Expanded: {ipv6_expanded_short}")
+            slowprint("\033[1;33m IPV6 Compressed:\033[1;91m " + ipv6_compressed)
+            slowprint("\033[1;33m IPV6 Expanded (Shortened):\033[1;91m " + ipv6_expanded_full)
+            slowprint("\033[1;33m IPV6 Expanded:\033[1;91m " + ipv6_expanded_short)
             print(" ")
             input("\033[1;33m [+] Press Enter To Continue [+]")
             os.system("clear")
@@ -661,7 +660,7 @@ def run_ipv6_to_ipv4():
             print("\033[1;36m")
             os.system("figlet ipv6 to ipv4")
             print(" ")
-            ipv6_address = input("Enter an IPv6 address: ")
+            ipv6_address = input("\033[1;33mEnter an IPv6 address: \033[1;91m")
             if ipv6_address == "":
                 continue
 
@@ -669,18 +668,18 @@ def run_ipv6_to_ipv4():
 
             ipv4_mapped = ipv6.ipv4_mapped
             if ipv4_mapped:
-                slowprint(f"IPv4 address: {ipv4_mapped}")
+                slowprint(f"\033[1;33mIPv4 address:\033[1;91m {ipv4_mapped}")
             else:
-                slowprint("This IPv6 address does not map to an IPv4 address.")
+                slowprint("\033[1;33mThis IPv6 address does not map to an IPv4 address.\033[1;91m")
             
             print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]")
+            input("\033[1;33m [+] Press Enter To Continue [+]\033[1;91m")
             os.system("clear")
         except ipaddress.AddressValueError:
             try:
-                slowprint("Invalid IPv6 address")
+                slowprint("\033[1;33mInvalid IPv6 address\033[1;91m")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Continue [+]")
+                input("\033[1;33m [+] Press Enter To Continue [+]\033[1;91m")
                 os.system("clear")
             except KeyboardInterrupt:
                 os.system("clear")
@@ -986,3 +985,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
