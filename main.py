@@ -69,7 +69,7 @@ def ipinfo():
             slowprint("\033[1;36m" + " AS          : \033[1;32m " + values['as'] + "\n")
             print (" ")
             
-            input("\033[1;33m [+] Press Enter To Continue [+]")
+            magas = input("\033[1;33m [+] Press Enter To Continue [+]")
 
             os.system("clear")
 
