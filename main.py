@@ -28,18 +28,34 @@ def slowprint(s, delay=1./400, newline=True):
 def ipinfo():
     while True:
         try:
-            os.system("figlet scan ip")
+            os.system("figlet Ip Scanner ")
             print(" ")
             ip = input(" Enter IP Address : \033[1;32m ")
             if ip.strip() == "":
                 return
+
+            try:
+                ip_addr = ipaddress.ip_address(ip)
+                if ip_addr.is_private:
+                    print(" ")
+                    print("\033[1;31m Error: Please enter a public IP address.")
+                    print(" ")
+                    input("\033[1;33m [+] Press Enter To Continue [+]")
+                    os.system("clear")
+                    continue
+            except ValueError:
+                print(" ")
+                print("\033[1;31m Error: Invalid IP address.")
+                print(" ")
+                input("\033[1;33m [+] Press Enter To Continue [+]")
+                os.system("clear")
+                continue
 
             url = ("http://ip-api.com/json/")
             response = urllib.request.urlopen(url + ip)
             data = response.read()
             values = json.loads(data)
 
-            # print ("\033[1;32m\007\n")
             slowprint("\033[1;36m" + "\n IP          : \033[1;32m " + values['query'])
             slowprint("\033[1;36m" + " Status      : \033[1;32m " + values['status'])
             slowprint("\033[1;36m" + " Region      : \033[1;32m " + values['regionName'])
@@ -53,7 +69,7 @@ def ipinfo():
             slowprint("\033[1;36m" + " AS          : \033[1;32m " + values['as'] + "\n")
             print (" ")
             
-            magas = input("\033[1;33m [+] Press Enter To Continue [+]")
+            input("\033[1;33m [+] Press Enter To Continue [+]")
 
             os.system("clear")
 
@@ -693,10 +709,9 @@ def ipv4_subnet_calculator():
             host_min = network_address + 1
             host_max = broadcast_address - 1
             num_hosts = network.num_addresses
-            usable_hosts = max(num_hosts - 2, 0)  # Number of usable hosts
+            usable_hosts = max(num_hosts - 2, 0)  
             wildcard_mask = ipaddress.IPv4Address(int(ipaddress.IPv4Address('255.255.255.255')) - int(netmask))
 
-            # Determine IP class
             first_octet = int(str(ip).split('.')[0])
             if first_octet >= 1 and first_octet <= 126:
                 ip_class = "A"
@@ -709,7 +724,6 @@ def ipv4_subnet_calculator():
             else:
                 ip_class = "E (Reserved)"
 
-            # Check if IP is private
             if ip.is_private:
                 ip_type = "Private"
             else:
@@ -858,7 +872,7 @@ def main():
             slowprint(" ")
 
             column1 = [
-                "\033[1;33m [ 1  ]\033[1;91m Scan IP Address",
+                "\033[1;33m [ 1  ]\033[1;91m Public IP scanner",
                 "\033[1;33m [ 2  ]\033[1;91m DNS Lookup",
                 "\033[1;33m [ 3  ]\033[1;91m ipv4 Subnet divider",
                 "\033[1;33m [ 4  ]\033[1;91m IP to Binary",
