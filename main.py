@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#
+
 import os
 import urllib.request
 import json
@@ -57,6 +57,7 @@ def ipinfo():
             data = response.read()
             values = json.loads(data)
 
+            slowprint(" ")
             slowprint("\033[1;36m" + "IP          : \033[1;32m" + values['query'])
             slowprint("\033[1;36m" + "Status      : \033[1;32m" + values['status'])
             slowprint("\033[1;36m" + "Region      : \033[1;32m" + values['regionName'])
@@ -694,7 +695,7 @@ def ipv4_subnet_calculator():
             print("\033[1;36m")
             os.system("figlet IPv4 Subnet Calculator")
             print(" ")
-            ipv4_input = input("Enter an IPv4 address with CIDR (e.g., 192.0.3.171/27): ")
+            ipv4_input = input("\033[1;33mEnter an IPv4 address with CIDR (e.g., 192.0.3.171/27): \033[0m")
             print(" ")
             if ipv4_input == "":
                 continue
@@ -749,9 +750,9 @@ def ipv4_subnet_calculator():
         except ValueError as e:
             os.system("clear")
             try:
-                slowprint(f"Error: {e}")
+                slowprint(f"\033[1;31mError: {e}\033[0m")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Retry [+]")
+                magas = input("\033[1;33m [+] Press Enter To Retry [+]")
                 os.system("clear")
             except KeyboardInterrupt:
                 os.system("clear")
@@ -766,7 +767,7 @@ def ipv4_subnet_calculator():
             try:
                 slowprint(f"An unexpected error occurred: {e}")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Retry [+]")
+                magas = input("\033[1;33m [+] Press Enter To Retry [+]")
                 os.system("clear")
             except KeyboardInterrupt:
                 os.system("clear")
@@ -794,18 +795,18 @@ def ipv6_subnet_calculator():
             ipv4_repr = ip.ipv4_mapped if ip.ipv4_mapped else "No IPv4 representation"
             ptr_rr_name = ip.reverse_pointer
 
-            print(f"\033[1;33mAddress:    \033[1;91m {ip}/{netmask}")
-            print(f"\033[1;33mNetmask:    \033[1;91m {network.netmask} = {netmask}")
-            print(f"\033[1;33mNetwork:    \033[1;91m {network_address}/{netmask}")
-            print(f"\033[1;33mHostMin:    \033[1;91m {host_min}")
-            print(f"\033[1;33mHostMax:    \033[1;91m {host_max}")
-            print(f"\033[1;33mBroadcast:  \033[1;91m {broadcast_address}")
-            print(f"\033[1;33mHosts/Net:  \033[1;91m {num_hosts}")
-            print(f"\033[1;33mIPv4 repr:  \033[1;91m {ipv4_repr}")
-            print(f"\033[1;33mPTR RR name:\033[1;91m {ptr_rr_name}")
-            print(f"\033[1;33mIP version: \033[1;91m {ip.version}")
-            print(" ")
-            input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
+            slowprint(f"\033[1;33mAddress:    \033[1;91m {ip}/{netmask}")
+            slowprint(f"\033[1;33mNetmask:    \033[1;91m {network.netmask} = {netmask}")
+            slowprint(f"\033[1;33mNetwork:    \033[1;91m {network_address}/{netmask}")
+            slowprint(f"\033[1;33mHostMin:    \033[1;91m {host_min}")
+            slowprint(f"\033[1;33mHostMax:    \033[1;91m {host_max}")
+            slowprint(f"\033[1;33mBroadcast:  \033[1;91m {broadcast_address}")
+            slowprint(f"\033[1;33mHosts/Net:  \033[1;91m {num_hosts}")
+            slowprint(f"\033[1;33mIPv4 repr:  \033[1;91m {ipv4_repr}")
+            slowprint(f"\033[1;33mPTR RR name:\033[1;91m {ptr_rr_name}")
+            slowprint(f"\033[1;33mIP version: \033[1;91m {ip.version}")
+            slowprint(" ")
+            magas = input("\033[1;33m [+] Press Enter To Continue [+]\033[0m")
             os.system("clear")
         
         except ValueError as e:
@@ -813,7 +814,7 @@ def ipv6_subnet_calculator():
             try:
                 slowprint(f"Error: {e}")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Retry [+]")
+                magas = input("\033[1;33m [+] Press Enter To Retry [+]")
                 os.system("clear")
             except KeyboardInterrupt:
                 os.system("clear")
@@ -828,7 +829,7 @@ def ipv6_subnet_calculator():
             try:
                 slowprint(f"An unexpected error occurred: {e}")
                 print(" ")
-                input("\033[1;33m [+] Press Enter To Retry [+]")
+                magas = input("\033[1;33m [+] Press Enter To Retry [+]")
                 os.system("clear")
             except KeyboardInterrupt:
                 os.system("clear")
@@ -843,7 +844,7 @@ def about():
         slowprint ("\033[1;91m -----------------------------------------------")
         slowprint ("\033[1;33m" + "         [+] Tool Name     =>\033[1;36m" + " Sys Tools")
         slowprint ("\033[1;33m" + "         [+] Author        =>\033[1;36m" + " fruitsaladchan ")
-        slowprint ("\033[1;33m" + "         [+] Latest Update =>\033[1;36m" + " 25/8/2024")
+        slowprint ("\033[1;33m" + "         [+] Latest Update =>\033[1;36m" + " 29/8/2024")
         slowprint ("\033[1;33m" + "         [+] Github        =>\033[1;36m" + " Github.com/fruitsaladchan")
         slowprint ("\033[1;91m -----------------------------------------------")
         print(" ")
