@@ -15,6 +15,8 @@ import random
 import string
 import psutil
 import nmap
+import requests
+from uuid import getnode as get_mac
 
 def slowprint(s, delay=1./400, newline=True):
     for c in s:
@@ -835,6 +837,82 @@ def ipv6_subnet_calculator():
                 os.system("clear")
                 return
 
+def get_network_info():
+    while True:
+        try:
+            os.system("clear")
+            os.system("figlet Network Info")
+            print(" ")
+
+            mac_address = ':'.join(("%012X" % get_mac())[i:i+2] for i in range(0, 12, 2))
+
+            public_ip = requests.get('https://api.ipify.org').text
+
+            network_info = {}
+            for interface_name, interface_addresses in psutil.net_if_addrs().items():
+                ipv4_address = None
+                ipv6_address = None
+                subnet_mask = None
+                mac = None
+                for address in interface_addresses:
+                    if address.family == socket.AF_INET:
+                        ipv4_address = address.address
+                        subnet_mask = address.netmask
+                    elif address.family == socket.AF_INET6:
+                        ipv6_address = address.address
+                    elif address.family == psutil.AF_LINK:
+                        mac = address.address
+                
+                stats = psutil.net_if_stats()[interface_name]
+                is_up = stats.isup
+                mtu = stats.mtu
+                speed = stats.speed 
+
+                network_info[interface_name] = {
+                    'IPv4 Address': ipv4_address,
+                    'Subnet Mask': subnet_mask,
+                    'IPv6 Address': ipv6_address,
+                    'MAC Address': mac,
+                    'Is Up': is_up,
+                    'MTU': mtu,
+                    'Speed (Mbps)': speed
+                }
+
+            slowprint(f"\033[1;32mPublic IP Address: \033[1;91m{public_ip}\033[0m")
+            slowprint(f"\033[1;32mMAC Address: \033[1;91m{mac_address}\033[0m")
+            print("\n\033[1;32mNetwork Interfaces:\033[0m")
+            for interface_name, details in network_info.items():
+                slowprint(f"\033[1;33m  Interface: \033[1;91m{interface_name}\033[0m")
+                for key, value in details.items():
+                    slowprint(f"\033[1;32m    {key}: \033[1;91m{value}\033[0m")
+            
+            print("\n\033[1;32mDefault Gateway and DNS Servers:\033[0m")
+            gateways = psutil.net_if_stats()
+            for gname, ginfo in gateways.items():
+                slowprint(f"\033[1;33m  Gateway: \033[1;91m{gname}\033[0m, \033[1;32mInfo: \033[1;91m{ginfo}\033[0m")
+                for key, value in ginfo._asdict().items():
+                    slowprint(f"\033[1;32m    {key}: \033[1;91m{value}\033[0m")
+            
+            print(" ")
+            input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
+            os.system("clear")
+            return
+
+        except KeyboardInterrupt:
+            os.system("clear")
+            return
+
+        except Exception as e:
+            os.system("clear")
+            try:
+                slowprint(f"\033[1;31mAn error occurred: {str(e)}\033[0m")
+                print(" ")
+                input("\033[1;33m[+] Press Enter To Continue [+]\033[0m")
+                os.system("clear")
+            except KeyboardInterrupt:
+                os.system("clear")
+                return
+
 def about():
     try:
         os.system("clear")
@@ -890,7 +968,7 @@ def main():
                 "\033[1;33m [ 13 ]\033[1;91m Mask to CIDR",
                 "\033[1;33m [ 14 ]\033[1;91m ipv4 subnet Calculator",
                 "\033[1;33m [ 15 ]\033[1;91m ipv6 subnet Calculator",
-                "\033[1;33m [ 16 ]\033[1;91m About This Tool",
+                "\033[1;33m [ 16 ]\033[1;91m Network Info",
 
             ]
 
@@ -898,7 +976,8 @@ def main():
                 slowprint(f"{column1[i]:<50} {column2[i]}")
 
             print("     ")
-            slowprint("\033[1;33m [ 0  ]\033[1;91m Exit")
+            slowprint("\033[1;33m [ 0  ]\033[1;91m About This Tool")
+            slowprint("\033[1;33m [ 00 ]\033[1;91m Exit")
             print("     ")
 
             option = input("\033[1;36m [+] SysTools >> \033[1;32m")
@@ -964,9 +1043,13 @@ def main():
 
             elif option == "16":
                 os.system("clear")
-                about()
+                get_network_info()
 
             elif option == "0":
+                os.system("clear")
+                about()
+
+            elif option == "00":
                 os.system("clear")
                 ext()
 
