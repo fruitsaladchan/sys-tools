@@ -18,6 +18,7 @@ bad at python, messy code :(
 - ipv6 to ipv4 calculator
 - ipv4 subnet calculator
 - ipv6 calculator
+- Network info tool
 
 ## requirments
 
