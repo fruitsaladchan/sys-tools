@@ -186,7 +186,7 @@ def ip_to_binary():
                 os.system("clear")
                 try:
                     slowprint("\033[1;91mError: \033[1;33mYou forgot to include the CIDR notation. Please try again.\033[0m")
-                    input("\n\033[1;33m [+] Press Enter To Retry [+]\033[0m")
+                    magas = input("\n\033[1;33m [+] Press Enter To Retry [+]\033[0m")
                     os.system("clear")
                     continue
                 except KeyboardInterrupt:
@@ -969,15 +969,14 @@ def main():
                 "\033[1;33m [ 14 ]\033[1;91m ipv4 subnet Calculator",
                 "\033[1;33m [ 15 ]\033[1;91m ipv6 subnet Calculator",
                 "\033[1;33m [ 16 ]\033[1;91m Network Info",
-
             ]
 
             for i in range(len(column1)):
                 slowprint(f"{column1[i]:<50} {column2[i]}")
 
             print("     ")
-            slowprint("\033[1;33m [ 0  ]\033[1;91m About This Tool")
-            slowprint("\033[1;33m [ 00 ]\033[1;91m Exit")
+
+            slowprint(f"\033[1;33m [ 0  ]\033[1;91m About This Tool{' ' * 14}\033[1;33m [ 00 ]\033[1;91m Exit")
             print("     ")
 
             option = input("\033[1;36m [+] SysTools >> \033[1;32m")
@@ -1069,4 +1068,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
