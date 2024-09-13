@@ -1,6 +1,6 @@
 # sys-tools
 
-bad at python, messy code :(
+messy code
 
 ### includes
 - ip scanner
