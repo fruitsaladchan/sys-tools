@@ -25,4 +25,4 @@ messy code
 - sudo apt-get install figlet nmap     (For Ubuntu/Debian)
 - sudo pacman -S figlet nmap           (For Arch Linux)
 
-- pip install psutil python-nmap pyreadline3
+- pip install psutil python-nmap pyreadline3 requests
